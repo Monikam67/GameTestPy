@@ -26,7 +26,7 @@ AmbientLight(color=color.rgb(100,100,100))
 ground.shader = lit_with_shadows_shader
 box1.shader = lit_with_shadows_shader
 wall.shader=lit_with_shadows_shader
-
+Sky=Sky()
 
 
 
@@ -37,3 +37,4 @@ wall.shader=lit_with_shadows_shader
 
 
 app.run()
+
