@@ -18,6 +18,14 @@ box3=Entity(model='cube',color=color.blue,collider='box',position=(1,4,1))
 box4=Entity(model='cube',color=color.gray,collider='box',position=(1,1,4))
 box5=Entity(model='cube',color=color.red,collider='box',position=(box_Y,box_X,box_Z))
 wall=Entity(model='cube',collider='box',texture='brick.jpg',scale=(20,10,2),position=(20,1,20))
+sun = DirectionalLight(shadows=True)
+sun.look_at(Vec3(-1,-1,-1))
+sun.shadow_map_resolution = (32000, 32000)#больше четче тени
+
+AmbientLight(color=color.rgb(100,100,100))
+ground.shader = lit_with_shadows_shader
+box1.shader = lit_with_shadows_shader
+wall.shader=lit_with_shadows_shader
 
 
 
