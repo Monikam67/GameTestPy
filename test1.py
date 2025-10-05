@@ -1,7 +1,7 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader, basic_lighting_shader
-
+from direct.filter.CommonFilters import CommonFilters
 app=Ursina()
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(100,1,100))
 player=FirstPersonController(collider='box')
@@ -27,7 +27,8 @@ ground.shader = lit_with_shadows_shader
 box1.shader = lit_with_shadows_shader
 wall.shader=lit_with_shadows_shader
 Sky=Sky()
-
+filters = CommonFilters(base.win, base.cam)# если ошибка то так и нужно
+filters.setBloom(intensity=2.0)
 
 
 
@@ -37,4 +38,5 @@ Sky=Sky()
 
 
 app.run()
+
 
