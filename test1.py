@@ -31,6 +31,23 @@ filters = CommonFilters(base.win, base.cam)# если ошибка то так �
 filters.setBloom(intensity=2.0)
 
 
+walk=Audio('walk.mp3',loop=True,autoplay=False)
+jump=Audio('jump.mp3',loop=False,autoplay=False)
+def update():
+    walking=held_keys['a']or held_keys['w'] or held_keys['d']or held_keys['s']
+    if walking and player.grounded:
+        if not walk.playing:
+            walk.play()
+    else:
+        if walk.playing:
+            walk.stop()
+def input(key):
+    if key == 'space':
+        if not jump.playing:
+            jump.play()
+    if key == 'q':
+        quit()
+
 
 
 
@@ -38,5 +55,6 @@ filters.setBloom(intensity=2.0)
 
 
 app.run()
+
 
 
