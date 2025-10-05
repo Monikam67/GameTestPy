@@ -5,9 +5,6 @@ from direct.filter.CommonFilters import CommonFilters
 app=Ursina()
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(100,1,100))
 player=FirstPersonController(collider='box')
-def input(key):
-    if key == 'q':
-        quit()
 brick=load_texture('Test1.jpg')
 box_Y=10
 box_X=2
@@ -55,6 +52,7 @@ def input(key):
 
 
 app.run()
+
 
 
 
