@@ -11,7 +11,7 @@ loadPrcFileData('', 'sync-video false')   # отключает VSync
 loadPrcFileData('', 'clock-mode limited') # можно также 'clock-mode unlimited'
 loadPrcFileData('', 'clock-frame-rate 120') # снимает лимит FPS
 app=Ursina()
-ground=Entity(model='cube',collider='mesh',texture='grass',scale=(100,1,100))
+ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
 brick=load_texture('Test1.jpg')
 box_Y=10
@@ -407,6 +407,7 @@ def input(key):
 
 
 app.run()
+
 
 
 
