@@ -575,7 +575,3 @@ def close_dialogue():
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
-
-
-
-
