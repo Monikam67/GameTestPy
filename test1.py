@@ -38,14 +38,15 @@ filters.setBloom(intensity=1.5)
 
 
 human=Entity(
-    parent=scene,position=(-5,1,5))
-head=Entity(parent=human,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(0.5,2.2,1),collider='sphere',rotation=(0,90,0))
-body= Entity(parent=human,model='Sphere',texture='body.png',scale=(1,2,1),position=(0.5,1,1),rotation=(0,90,0),collider='sphere')
-right=Entity(parent=human,model='Sphere',texture='body.png',scale=(0.5,2,0.5),position=(1,1.3,1),rotation=(-30,120,0))
+    parent=scene,position=(10,1,3.8))
+head=Entity(parent=human,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,3.8),rotation=(0,90,0))
+body= Entity(parent=human,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(10,1,3.8))
+right=Entity(parent=human,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(10.7,1,3.8))
+human_collider=Entity(parent=human,model='cube',position=(10,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
 
 
-human2 = Entity(model='human.fbx',scale=0.1,position=(-5, 1, 1),rotation_y=180,texture='human1.png',collider='sphere')
-human2_collider=Entity(scale=1,position=(-5, 1, 1),rotation_y=90,collider='sphere')
+human2 = Entity(parent=scene,model='human.fbx',scale=0.1,position=(5, 1, 1),rotation_y=180,texture='human1.png',collider='sphere')
+human2_collider=Entity(scale=1,position=(5, 1, 1),rotation_y=90,collider='sphere')
 
 house1=Entity(model='house.glb',scale=1.0,position=(20,0.6,20))
 house2=Entity(model='house.glb',scale=1.0,position=(50,0.6,20))
@@ -299,7 +300,81 @@ moon = Entity(
     position=(50, 100, 100),
     double_sided=True
 )
+
+
+
+
+
+
+
+press_e_text = Text("Нажмите E", origin=(0, 0), scale=2,
+                    position=(0, .2), color=color.white)
+press_e_text.enabled = False
+
+
+dialogue_bg = Entity(parent=camera.ui, model='quad', scale=(1.6,1), y=-0.6,
+                     color=color.black66)
+
+dialogue_bg.enabled = False
+
+
+npc_name = Text("Человек", parent=dialogue_bg, y=0.45,
+                origin=(0, 0), scale=(2,2),color=color.white,bold=True)
+
+npc_line = Text("...", parent=dialogue_bg, y=0.4,
+                origin=(0, 0), scale=1.1, wordwrap=500)
+
+
+button1 = Button(text='Привет и пока', color=color.green, scale=(0.2, 0.08),
+                 position=(-0.15, -0.45), enabled=False)
+button2 = Button(text='Пока', color=color.red, scale=(0.2, 0.08),
+                 position=(0.15, -0.45), enabled=False)
+button1.enabled = False
+button2.enabled = False
+
+in_dialogue = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def update():
+    global in_dialogue
+
+    if in_dialogue:
+        press_e_text.enabled = False
+        return
+
+    if human_collider.hovered:
+        press_e_text.enabled = True
+    else:
+        press_e_text.enabled = False
     walking=held_keys['a']or held_keys['w'] or held_keys['d']or held_keys['s']
     if walking and player.grounded:
         if not walk.playing:
@@ -406,6 +481,21 @@ def remove_shaders_from_all_objects():
 
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 def input(key):
+    global in_dialogue
+    if key == 'e' and human_collider.hovered and not in_dialogue:
+        in_dialogue = True
+        dialogue_bg.enabled = True
+        npc_name.text = "Человек"
+        npc_line.text = "Привет! Рад тебя видеть. Что скажешь?"
+        button1.enabled = True
+        button2.enabled = True
+        press_e_text.enabled = False
+        player.enabled = False
+
+    if key == '1' and in_dialogue:
+        close_dialogue()
+    if key == '2' and in_dialogue:
+        close_dialogue()
     global lvl
     if key == 'p':
         switch_level()
@@ -414,8 +504,18 @@ def input(key):
             jump.play()
     if key == 'q':
         quit()
-
+def close_dialogue():
+    global in_dialogue
+    dialogue_bg.enabled = False
+    button1.enabled = False
+    button2.enabled = False
+    in_dialogue = False
+    press_e_text.enabled = False
+    player.enabled = True
+button1.on_click = close_dialogue
+button2.on_click = close_dialogue
 app.run()
+
 
 
 
