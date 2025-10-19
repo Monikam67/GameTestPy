@@ -1,16 +1,18 @@
-from panda3d.core import Material
 from ursina import *
 from ursina import load_texture
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader, basic_lighting_shader, unlit_shader
 from direct.filter.CommonFilters import CommonFilters
 from panda3d.core import loadPrcFileData
-from panda3d.core import PointLight, Vec4
-from panda3d.core import PointLight
-loadPrcFileData('', 'sync-video false')   # отключает VSync
-loadPrcFileData('', 'clock-mode limited') # можно также 'clock-mode unlimited'
-loadPrcFileData('', 'clock-frame-rate 120') # снимает лимит FPS
+from ursina import Entity
+
+loadPrcFileData('', 'sync-video False')         # отключает VSync       # ограничение FPS
+loadPrcFileData('', 'clock-frame-rate 180')     # максимум FPS
+loadPrcFileData('', 'show-frame-rate-meter True')
 app=Ursina()
+
+walk=Audio('walk.mp3',loop=True,autoplay=False)
+jump=Audio('jump.mp3',loop=False,autoplay=False)
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
 brick=load_texture('Test1.jpg')
@@ -23,19 +25,16 @@ box3=Entity(model='cube',color=color.blue,collider='box',position=(1,4,1))
 box4=Entity(model='cube',color=color.gray,collider='box',position=(1,1,4))
 box5=Entity(model='cube',color=color.red,collider='box',position=(box_Y,box_X,box_Z))
 #wall=Entity(model='cube',collider='box',texture='brick.jpg',scale=(20,10,2),position=(20,1,20))
+
 sun = DirectionalLight(shadows=True)
 sun.look_at(Vec3(-1,-1,-1))
-sun.shadow_map_resolution = (32000, 32000)
+sun.shadow_map_resolution = (4096, 4096)
 sun.color=color.rgb(1, 0.95, 0.9)
 AmbientLight(color=color.rgb(100,100,75))
 Sky=Sky()
 Sky.texture='sky_default'
 filters = CommonFilters(base.win, base.cam)
 filters.setBloom(intensity=1.5)
-
-
-walk=Audio('walk.mp3',loop=True,autoplay=False)
-jump=Audio('jump.mp3',loop=False,autoplay=False)
 
 
 human=Entity(
@@ -48,15 +47,14 @@ right=Entity(parent=human,model='Sphere',texture='body.png',scale=(0.5,2,0.5),po
 human2 = Entity(model='human.fbx',scale=0.1,position=(-5, 1, 1),rotation_y=180,texture='human1.png',collider='sphere')
 human2_collider=Entity(scale=1,position=(-5, 1, 1),rotation_y=90,collider='sphere')
 
-
-house=Entity(model='house.glb',scale=1.0,position=(20,0.6,20),shader=lit_with_shadows_shader)
-house2=Entity(model='house.glb',scale=1.0,position=(50,0.6,20),shader=lit_with_shadows_shader)
-house3=Entity(model='house.glb',scale=1.0,position=(80,0.6,20),shader=lit_with_shadows_shader)
-house4=Entity(model='house.glb',scale=1.0,position=(110,0.6,20),shader=lit_with_shadows_shader)
-house5=Entity(model='house.glb',scale=1.0,position=(20,0.6,-20),rotation=(0,180,0),shader=lit_with_shadows_shader)
-house6=Entity(model='house.glb',scale=1.0,position=(50,0.6,-20),rotation=(0,180,0),shader=lit_with_shadows_shader)
-house7=Entity(model='house.glb',scale=1.0,position=(80,0.6,-20),rotation=(0,180,0),shader=lit_with_shadows_shader)
-house8=Entity(model='house.glb',scale=1.0,position=(110,0.6,-20),rotation=(0,180,0),shader=lit_with_shadows_shader)
+house1=Entity(model='house.glb',scale=1.0,position=(20,0.6,20))
+house2=Entity(model='house.glb',scale=1.0,position=(50,0.6,20))
+house3=Entity(model='house.glb',scale=1.0,position=(80,0.6,20))
+house4=Entity(model='house.glb',scale=1.0,position=(110,0.6,20))
+house5=Entity(model='house.glb',scale=1.0,position=(20,0.6,-20),rotation=(0,180,0))
+house6=Entity(model='house.glb',scale=1.0,position=(50,0.6,-20),rotation=(0,180,0))
+house7=Entity(model='house.glb',scale=1.0,position=(80,0.6,-20),rotation=(0,180,0))
+house8=Entity(model='house.glb',scale=1.0,position=(110,0.6,-20),rotation=(0,180,0))
 roada=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(20,0.2,0),collider='box',shader=lit_with_shadows_shader)
 roadb=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(60,0.2,0),collider='box',shader=lit_with_shadows_shader)
 roadc=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(100,0.2,0),collider='box',shader=lit_with_shadows_shader)
@@ -271,7 +269,10 @@ back1=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), 
 back2=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(0,-0.4,30))
 back3=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(60,-0.4,-30))
 back4=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(0,-0.4,-30))
+back5=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(-30,0,0),rotation=(0,90,0))
+back6=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(140,0,0),rotation=(0,90,0))
 houseOWN=Entity(model='house2.glb',scale=1.3,position=(-6,0.6,0),collider='box')
+
 # print("=== Дочерние узлы модели ===")
 # for child in Trailer.model.get_children():
 #     print(child)
@@ -289,7 +290,8 @@ human.shader=lit_with_shadows_shader
 head.shader=lit_with_shadows_shader
 body.shader=lit_with_shadows_shader
 right.shader=lit_with_shadows_shader
-house.shader=lit_with_shadows_shader
+house1.shader=lit_with_shadows_shader
+
 moon = Entity(
     model='sphere',
     color=color.rgb(180, 180, 255),
@@ -297,7 +299,6 @@ moon = Entity(
     position=(50, 100, 100),
     double_sided=True
 )
-
 def update():
     walking=held_keys['a']or held_keys['w'] or held_keys['d']or held_keys['s']
     if walking and player.grounded:
@@ -306,7 +307,10 @@ def update():
     else:
         if walk.playing:
             walk.stop()
-lvl=1
+
+
+lvl = 1
+
 def switch_level():
     global lvl
     if lvl == 1:
@@ -336,6 +340,8 @@ def switch_level():
 
         lvl = 1
         print("Переключено на день (уровень 1) - шейдеры выключены")
+
+
 def apply_shaders_to_all_objects():
     """Добавляет шейдер lit_with_shadows_shader ко всем объектам"""
     all_objects = []
@@ -353,16 +359,20 @@ def apply_shaders_to_all_objects():
             all_objects.append(globals()[obj_name])
 
     # Добавляем back объекты
-    for i in range(1, 5):
+    for i in range(1, 7):
         obj_name = f'back{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
-
-    # Применяем шейдер ко всем объектам
+    for i in range(1,8):
+        obj_name = f'house{i}'
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
     for obj in all_objects:
         obj.shader = lit_with_shadows_shader
 
     print(f"Шейдеры применены к {len(all_objects)} объектам")
+
+
 def remove_shaders_from_all_objects():
     """Убирает шейдеры со всех объектов"""
     all_objects = []
@@ -380,10 +390,15 @@ def remove_shaders_from_all_objects():
             all_objects.append(globals()[obj_name])
 
     # Добавляем back объекты
-    for i in range(1, 5):
+    for i in range(1, 7):
         obj_name = f'back{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
+    for i in range(1,8):
+        obj_name = f'house{i}'
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
+
 
     # Убираем шейдеры со всех объектов
     for obj in all_objects:
@@ -399,12 +414,6 @@ def input(key):
             jump.play()
     if key == 'q':
         quit()
-
-
-
-
-
-
 
 app.run()
 
