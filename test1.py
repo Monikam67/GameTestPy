@@ -9,10 +9,12 @@ from ursina import Entity
 loadPrcFileData('', 'sync-video False')         # отключает VSync       # ограничение FPS
 loadPrcFileData('', 'clock-frame-rate 180')     # максимум FPS
 loadPrcFileData('', 'show-frame-rate-meter True')
+
 app=Ursina()
 
 walk=Audio('walk.mp3',loop=True,autoplay=False)
 jump=Audio('jump.mp3',loop=False,autoplay=False)
+
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
 brick=load_texture('Test1.jpg')
@@ -37,12 +39,27 @@ filters = CommonFilters(base.win, base.cam)
 filters.setBloom(intensity=1.5)
 
 
-human=Entity(
+humana=Entity(
     parent=scene,position=(10,1,3.8))
-head=Entity(parent=human,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,3.8),rotation=(0,90,0))
-body= Entity(parent=human,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(10,1,3.8))
-right=Entity(parent=human,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(10.7,1,3.8))
-human_collider=Entity(parent=human,model='cube',position=(10,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
+head=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,3.8),rotation=(0,90,0))
+body= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(10,1,3.8))
+right=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(10.7,1,3.8))
+human_collider=Entity(parent=humana,model='cube',position=(10,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
+
+humanb=Entity(
+    parent=scene,position=(38,1,3.8))
+heada=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(38,2.1,3.8),rotation=(0,90,0))
+bodya= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(38,1,3.8))
+righta=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(38.7,1,3.8))
+human_collidera=Entity(parent=humana,model='cube',position=(38,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
+
+humanc=Entity(
+    parent=scene,position=(10,1,-11))
+headb=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,-11),rotation=(0,-90,0))
+bodyb= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,-90,0),position=(10,1,-11))
+rightb=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(30,-120,0),position=(10.7,1,-11))
+human_colliderb=Entity(parent=humana,model='cube',position=(10,1,-11),scale=(1,2,1),color=color.clear,collider='box')
+all_npcs = [human_collider, human_collidera,human_colliderb,human_colliderb]
 
 
 human2 = Entity(parent=scene,model='human.fbx',scale=0.1,position=(5, 1, 1),rotation_y=180,texture='human1.png',collider='sphere')
@@ -287,7 +304,7 @@ box3.shader=lit_with_shadows_shader
 box4.shader=lit_with_shadows_shader
 box5.shader=lit_with_shadows_shader
 box1.shader=lit_with_shadows_shader
-human.shader=lit_with_shadows_shader
+humana.shader=lit_with_shadows_shader
 head.shader=lit_with_shadows_shader
 body.shader=lit_with_shadows_shader
 right.shader=lit_with_shadows_shader
@@ -307,8 +324,20 @@ moon = Entity(
 
 
 
-press_e_text = Text("Нажмите E", origin=(0, 0), scale=2,
-                    position=(0, .2), color=color.white)
+press_e_text = Text(
+    text='>> НАЖМИТЕ E <<',
+    position=(0, 0.3),
+    origin=(0, 0),
+    scale=1.8,
+    color=color.green,
+    background=True,
+    background_color=color.rgba(0, 0, 0, 200),
+    background_padding=(0.3, 0.2),
+    border_color=color.cyan,
+    border_width=2,
+    enabled=False
+)
+
 press_e_text.enabled = False
 
 
@@ -335,35 +364,6 @@ button2.enabled = False
 in_dialogue = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def update():
     global in_dialogue
 
@@ -371,10 +371,30 @@ def update():
         press_e_text.enabled = False
         return
 
-    if human_collider.hovered:
-        press_e_text.enabled = True
-    else:
-        press_e_text.enabled = False
+    player_pos = player.position
+
+    # Зоны для всех NPC
+    in_zone1 = (18 <= player_pos.x <= 23 and
+                0.4 <= player_pos.y <= 0.7 and
+                3 <= player_pos.z <= 9)
+
+    in_zone2 = (45 <= player_pos.x <= 52 and
+                0.4 <= player_pos.y <= 0.7 and
+                4 <= player_pos.z <= 7.5)
+
+    in_zone3 = (17.5 <= player_pos.x <= 22.8 and
+                    0.4 <= player_pos.y <= 0.7 and
+                    -6.5 <= player_pos.z <= -4)
+
+    # Отладка
+    print(f"NPC1 - Hovered: {human_collider.hovered}, In zone: {in_zone1}")
+    print(f"NPC2 - Hovered: {human_collidera.hovered}, In zone: {in_zone2}")
+    print(f"NPC3 - Hovered: {human_colliderb.hovered}, In zone: {in_zone3}")
+    print(f"Player: ({player_pos.x:.1f}, {player_pos.y:.1f}, {player_pos.z:.1f})")
+
+    press_e_text.enabled = ((human_collider.hovered and in_zone1) or
+                            (human_collidera.hovered and in_zone2) or
+                            (human_colliderb.hovered and in_zone3))
     walking=held_keys['a']or held_keys['w'] or held_keys['d']or held_keys['s']
     if walking and player.grounded:
         if not walk.playing:
@@ -482,15 +502,55 @@ def remove_shaders_from_all_objects():
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 def input(key):
     global in_dialogue
-    if key == 'e' and human_collider.hovered and not in_dialogue:
-        in_dialogue = True
-        dialogue_bg.enabled = True
-        npc_name.text = "Человек"
-        npc_line.text = "Привет! Рад тебя видеть. Что скажешь?"
-        button1.enabled = True
-        button2.enabled = True
-        press_e_text.enabled = False
-        player.enabled = False
+
+    if key == 'e' and not in_dialogue and press_e_text.enabled:
+        player_pos = player.position
+
+        # Проверяем зоны для всех NPC
+        in_zone1 = (18 <= player_pos.x <= 23 and
+                    0.4 <= player_pos.y <= 0.7 and
+                    3 <= player_pos.z <= 9)
+
+        in_zone2 = (45 <= player_pos.x <= 52 and
+                    0.4 <= player_pos.y <= 0.7 and
+                    4 <= player_pos.z <= 7.5)
+
+        in_zone3 = (17.5 <= player_pos.x <= 22.8 and
+                    0.4 <= player_pos.y <= 0.7 and
+                    -6.5 <= player_pos.z <= -4)
+
+        if human_collider.hovered and in_zone1:
+            # Диалог с первым NPC
+            in_dialogue = True
+            dialogue_bg.enabled = True
+            npc_name.text = "Человек 1"
+            npc_line.text = "Привет! Рад тебя видеть. Что скажешь?"
+            button1.enabled = True
+            button2.enabled = True
+            press_e_text.enabled = False
+            player.enabled = False
+
+        elif human_collidera.hovered and in_zone2:
+            # Диалог со вторым NPC
+            in_dialogue = True
+            dialogue_bg.enabled = True
+            npc_name.text = "Человек 2"
+            npc_line.text = "Привет! Я второй NPC."
+            button1.enabled = True
+            button2.enabled = True
+            press_e_text.enabled = False
+            player.enabled = False
+
+        elif human_colliderb.hovered and in_zone3:
+            # Диалог с третьим NPC
+            in_dialogue = True
+            dialogue_bg.enabled = True
+            npc_name.text = "Человек 3"
+            npc_line.text = "Здравствуй! Я третий NPC."
+            button1.enabled = True
+            button2.enabled = True
+            press_e_text.enabled = False
+            player.enabled = False
 
     if key == '1' and in_dialogue:
         close_dialogue()
@@ -515,9 +575,6 @@ def close_dialogue():
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
-
-
-
 
 
 
