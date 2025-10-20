@@ -41,23 +41,23 @@ filters.setBloom(intensity=1.5)
 
 humana=Entity(
     parent=scene,position=(10,1,3.8))
-head=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,3.8),rotation=(0,90,0))
-body= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(10,1,3.8))
-right=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(10.7,1,3.8))
+head=Entity(parent=humana,model='sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,3.8),rotation=(0,90,0))
+body= Entity(parent=humana,model='sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(10,1,3.8))
+right=Entity(parent=humana,model='sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(10.7,1,3.8))
 human_collider=Entity(parent=humana,model='cube',position=(10,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
 
 humanb=Entity(
     parent=scene,position=(38,1,3.8))
-heada=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(38,2.1,3.8),rotation=(0,90,0))
-bodya= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(38,1,3.8))
-righta=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(38.7,1,3.8))
+heada=Entity(parent=humana,model='sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(38,2.1,3.8),rotation=(0,90,0))
+bodya= Entity(parent=humana,model='sphere',texture='body.png',scale=(1,2,1),rotation=(0,90,0),position=(38,1,3.8))
+righta=Entity(parent=humana,model='sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(-30,120,0),position=(38.7,1,3.8))
 human_collidera=Entity(parent=humana,model='cube',position=(38,1,3.8),scale=(1,2,1),color=color.clear,collider='box')
 
 humanc=Entity(
     parent=scene,position=(10,1,-11))
-headb=Entity(parent=humana,model='Sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,-11),rotation=(0,-90,0))
-bodyb= Entity(parent=humana,model='Sphere',texture='body.png',scale=(1,2,1),rotation=(0,-90,0),position=(10,1,-11))
-rightb=Entity(parent=humana,model='Sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(30,-120,0),position=(10.7,1,-11))
+headb=Entity(parent=humana,model='sphere',texture='face.jpg',scale=(0.7,0.7,0.7),position=(10,2.1,-11),rotation=(0,-90,0))
+bodyb= Entity(parent=humana,model='sphere',texture='body.png',scale=(1,2,1),rotation=(0,-90,0),position=(10,1,-11))
+rightb=Entity(parent=humana,model='sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(30,-120,0),position=(10.7,1,-11))
 human_colliderb=Entity(parent=humana,model='cube',position=(10,1,-11),scale=(1,2,1),color=color.clear,collider='box')
 all_npcs = [human_collider, human_collidera,human_colliderb,human_colliderb]
 
@@ -575,3 +575,4 @@ def close_dialogue():
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
+
