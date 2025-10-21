@@ -16,16 +16,7 @@ jump=Audio('../jump.mp3', loop=False, autoplay=False)
 
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
-brick=load_texture('Test1.jpg')
-box_Y=10
-box_X=2
-box_Z=1
-box1=Entity(model='cube',color=color.red,collider='box',position=(1,1,1))
-box2=Entity(model='cube',color=color.green,collider='box',position=(4,1,1))
-box3=Entity(model='cube',color=color.blue,collider='box',position=(1,4,1))
-box4=Entity(model='cube',color=color.gray,collider='box',position=(1,1,4))
-box5=Entity(model='cube',color=color.red,collider='box',position=(box_Y,box_X,box_Z))
-#wall=Entity(model='cube',collider='box',texture='brick.jpg',scale=(20,10,2),position=(20,1,20))
+
 
 sun = DirectionalLight(shadows=True)
 sun.look_at(Vec3(-1,-1,-1))
@@ -308,19 +299,12 @@ for child in zabor1.model.get_children():
     print(child)
 houseOWN.shader=basic_lighting_shader
 ground.shader = lit_with_shadows_shader
-box1.shader = lit_with_shadows_shader
-#wall.shader=lit_with_shadows_shader
-human2.shader=lit_with_shadows_shader
-box2.shader=lit_with_shadows_shader
-box3.shader=lit_with_shadows_shader
-box4.shader=lit_with_shadows_shader
-box5.shader=lit_with_shadows_shader
-box1.shader=lit_with_shadows_shader
 humana.shader=lit_with_shadows_shader
 head.shader=lit_with_shadows_shader
 body.shader=lit_with_shadows_shader
 right.shader=lit_with_shadows_shader
 house1.shader=lit_with_shadows_shader
+human2.shader=basic_lighting_shader
 
 moon = Entity(
     model='sphere',
@@ -542,6 +526,7 @@ def apply_shaders_to_all_objects():
     for obj in all_objects:
         obj.shader = lit_with_shadows_shader
         houseOWN.shader = lit_with_shadows_shader
+        human2.shader=lit_with_shadows_shader
 
     print(f"Шейдеры применены к {len(all_objects)} объектам")
 
@@ -583,6 +568,7 @@ def remove_shaders_from_all_objects():
         houseOWN.shader=basic_lighting_shader
         zabor1.shader=basic_lighting_shader
         zabor2.shader=basic_lighting_shader
+        human2.shader=basic_lighting_shader
 
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 def input(key):
