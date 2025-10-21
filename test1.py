@@ -35,7 +35,7 @@ AmbientLight(color=color.rgb(100,100,75))
 Sky=Sky()
 Sky.texture='sky_default'
 filters = CommonFilters(base.win, base.cam)
-filters.setBloom(intensity=1.5)
+filters.setBloom(intensity=1)
 
 
 humana=Entity(
@@ -277,7 +277,6 @@ tree93 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.0
 bigtree65 = Entity(model='tree03.fbx', texture='tree03.png', scale=(0.007,0.007,0.007), position=(60,0.2,-7))
 tree94 = Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(62,0.2,-12))
 tree95 = Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-zabor2=Entity(model='zabor2.glb', scale=(0.01,0.03,0.06), position=(-20,1,0),shader=lit_with_shadows_shader)
 # tree97=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
 # tree98=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
 # tree99=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
@@ -301,11 +300,13 @@ back4=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), 
 back5=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(-30,0,0),rotation=(0,90,0))
 back6=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(140,0,0),rotation=(0,90,0))
 houseOWN=Entity(model='house2.glb',scale=1.3,position=(-6,0.6,0),collider='box')
-
-# print("=== Дочерние узлы модели ===")
-# for child in Trailer.model.get_children():
-#     print(child)
-houseOWN.shader=lit_with_shadows_shader
+window=Entity(model='cube',color=color.gray,collider='box',position=(-6.5,3,-3),scale=(1,3,2),shader=basic_lighting_shader)
+zabor1=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,0.7),shader=basic_lighting_shader)
+zabor2=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,-55),shader=basic_lighting_shader)
+print("=== Дочерние узлы модели ===")
+for child in zabor1.model.get_children():
+    print(child)
+houseOWN.shader=basic_lighting_shader
 ground.shader = lit_with_shadows_shader
 box1.shader = lit_with_shadows_shader
 #wall.shader=lit_with_shadows_shader
@@ -455,10 +456,10 @@ def update():
                     -6.5 <= player_pos.z <= -4)
 
     # Отладка
-    print(f"NPC1 - Hovered: {human_collider.hovered}, In zone: {in_zone1}")
-    print(f"NPC2 - Hovered: {human_collidera.hovered}, In zone: {in_zone2}")
-    print(f"NPC3 - Hovered: {human_colliderb.hovered}, In zone: {in_zone3}")
-    print(f"Player: ({player_pos.x:.1f}, {player_pos.y:.1f}, {player_pos.z:.1f})")
+    # print(f"NPC1 - Hovered: {human_collider.hovered}, In zone: {in_zone1}")
+    # print(f"NPC2 - Hovered: {human_collidera.hovered}, In zone: {in_zone2}")
+    # print(f"NPC3 - Hovered: {human_colliderb.hovered}, In zone: {in_zone3}")
+    # print(f"Player: ({player_pos.x:.1f}, {player_pos.y:.1f}, {player_pos.z:.1f})")
 
     press_e_text.enabled = ((human_collider.hovered and in_zone1) or
                             (human_collidera.hovered and in_zone2) or
@@ -530,8 +531,17 @@ def apply_shaders_to_all_objects():
         obj_name = f'house{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
+    for i in range(1,3):
+        obj_name = f'zabor{i}'
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
+    for i in range(1, 3):
+        obj_name = houseOWN
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
     for obj in all_objects:
         obj.shader = lit_with_shadows_shader
+        houseOWN.shader = lit_with_shadows_shader
 
     print(f"Шейдеры применены к {len(all_objects)} объектам")
 
@@ -561,11 +571,18 @@ def remove_shaders_from_all_objects():
         obj_name = f'house{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
+    for i in range(1,3):
+        obj_name = f'zabor{i}'
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
 
 
     # Убираем шейдеры со всех объектов
     for obj in all_objects:
         obj.shader = unlit_shader
+        houseOWN.shader=basic_lighting_shader
+        zabor1.shader=basic_lighting_shader
+        zabor2.shader=basic_lighting_shader
 
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 def input(key):
@@ -618,4 +635,6 @@ def input(key):
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
+
+
 
