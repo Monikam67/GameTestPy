@@ -1,19 +1,18 @@
-from ursina import *
 from ursina import load_texture
+from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader, basic_lighting_shader, unlit_shader
 from direct.filter.CommonFilters import CommonFilters
 from panda3d.core import loadPrcFileData
 from ursina import Entity
-
 loadPrcFileData('', 'sync-video False')         # отключает VSync       # ограничение FPS
 loadPrcFileData('', 'clock-frame-rate 180')     # максимум FPS
 loadPrcFileData('', 'show-frame-rate-meter True')
 
 app=Ursina()
 
-walk=Audio('walk.mp3',loop=True,autoplay=False)
-jump=Audio('jump.mp3',loop=False,autoplay=False)
+walk=Audio('../walk.mp3', loop=True, autoplay=False)
+jump=Audio('../jump.mp3', loop=False, autoplay=False)
 
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
@@ -278,6 +277,18 @@ tree93 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.0
 bigtree65 = Entity(model='tree03.fbx', texture='tree03.png', scale=(0.007,0.007,0.007), position=(60,0.2,-7))
 tree94 = Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(62,0.2,-12))
 tree95 = Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+zabor2=Entity(model='zabor2.glb', scale=(0.01,0.03,0.06), position=(-20,1,0),shader=lit_with_shadows_shader)
+# tree97=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree98=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree99=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree100=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree101=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree102=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree103=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree104=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree105=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+# tree106=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
+
 
 tree96 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(88,0.2,-11))
 bigtree66 = Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(90,0.2,-7))
@@ -362,6 +373,63 @@ button1.enabled = False
 button2.enabled = False
 
 in_dialogue = False
+def start_dialogue(npc_name_text, npc_line_text):
+    global in_dialogue
+
+    in_dialogue = True
+    press_e_text.enabled = False
+    player.enabled = False
+
+    # Настраиваем текст
+    npc_name.text = npc_name_text
+    npc_line.text = npc_line_text
+
+    # Начальное состояние (невидимое)
+    dialogue_bg.scale_x = 0.1
+    dialogue_bg.scale_y = 0.1
+    dialogue_bg.enabled = True
+    dialogue_bg.color = dialogue_bg.color.tint(0)  # Прозрачный
+
+    # Скрываем кнопки и текст сначала
+    npc_name.enabled = False
+    npc_line.enabled = False
+    button1.enabled = False
+    button2.enabled = False
+
+    def animate_dialogue():
+        # Анимация фона
+        dialogue_bg.animate_scale((1.6, 1, 1), duration=0.6, curve=curve.out_quad)
+        dialogue_bg.animate_color(color.black66, duration=0.6)
+
+        # Появление текста с задержкой
+        invoke(setattr, npc_name, 'enabled', True, delay=0.6)
+        invoke(setattr, npc_line, 'enabled', True, delay=0.8)
+        invoke(setattr, button1, 'enabled', True, delay=0.9)
+        invoke(setattr, button2, 'enabled', True, delay=0.9)
+
+    animate_dialogue()
+
+
+def close_dialogue():
+    global in_dialogue
+
+    def animate_close():
+        dialogue_bg.animate_scale((0.1, 0.1, 1), duration=0.6, curve=curve.in_quad)
+        dialogue_bg.animate_color(dialogue_bg.color.tint(0), duration=0.6)
+
+        # Скрываем элементы
+        npc_name.enabled = False
+        npc_line.enabled = False
+        button1.enabled = False
+        button2.enabled = False
+
+        invoke(lambda: setattr(dialogue_bg, 'enabled', False), delay=1.3)
+        invoke(lambda: setattr(player, 'enabled', True), delay=0.8)
+        # ИСПРАВЛЕННАЯ СТРОКА - убрали globals()
+        invoke(lambda: globals().update({'in_dialogue': False}), delay=0.6)
+
+    animate_close()
+
 
 
 def update():
@@ -501,6 +569,7 @@ def remove_shaders_from_all_objects():
 
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 def input(key):
+
     global in_dialogue
 
     if key == 'e' and not in_dialogue and press_e_text.enabled:
@@ -521,36 +590,15 @@ def input(key):
 
         if human_collider.hovered and in_zone1:
             # Диалог с первым NPC
-            in_dialogue = True
-            dialogue_bg.enabled = True
-            npc_name.text = "Человек 1"
-            npc_line.text = "Привет! Рад тебя видеть. Что скажешь?"
-            button1.enabled = True
-            button2.enabled = True
-            press_e_text.enabled = False
-            player.enabled = False
+            start_dialogue("Человек 1", "Привет! Рад тебя видеть. Что скажешь?")
 
         elif human_collidera.hovered and in_zone2:
             # Диалог со вторым NPC
-            in_dialogue = True
-            dialogue_bg.enabled = True
-            npc_name.text = "Человек 2"
-            npc_line.text = "Привет! Я второй NPC."
-            button1.enabled = True
-            button2.enabled = True
-            press_e_text.enabled = False
-            player.enabled = False
+            start_dialogue("Человек 2", "Привет! Я второй NPC.")
 
         elif human_colliderb.hovered and in_zone3:
             # Диалог с третьим NPC
-            in_dialogue = True
-            dialogue_bg.enabled = True
-            npc_name.text = "Человек 3"
-            npc_line.text = "Здравствуй! Я третий NPC."
-            button1.enabled = True
-            button2.enabled = True
-            press_e_text.enabled = False
-            player.enabled = False
+            start_dialogue("Человек 3", "Здравствуй! Я третий NPC.")
 
     if key == '1' and in_dialogue:
         close_dialogue()
@@ -564,14 +612,9 @@ def input(key):
             jump.play()
     if key == 'q':
         quit()
-def close_dialogue():
-    global in_dialogue
-    dialogue_bg.enabled = False
-    button1.enabled = False
-    button2.enabled = False
-    in_dialogue = False
-    press_e_text.enabled = False
-    player.enabled = True
+
+
+# Обновите также кнопки чтобы они использовали новую функцию закрытия:
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
