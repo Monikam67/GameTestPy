@@ -13,7 +13,7 @@ app=Ursina()
 
 walk=Audio('../walk.mp3', loop=True, autoplay=False)
 jump=Audio('../jump.mp3', loop=False, autoplay=False)
-
+text_sound = Audio('soundtext1.m4a', loop=True, autoplay=False)
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
 
@@ -127,7 +127,7 @@ tree34=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003
 
 # Диапазон 55-75 (для bigtree: 50-70)
 tree13 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(58,0.2,10))
-bigtree11 = Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(70,0.2,12)) # 65-5=60
+bigtree11 = Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(72,0.2,12)) # 65-5=60
 tree14 = Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(62,0.2,8))
 bigtree12 = Entity(model='tree21.fbx', texture='tree21.png', scale=(0.007,0.007,0.007), position=(65,0.2,14)) # 70-5=65
 tree15 = Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(55,0.2,11))
@@ -146,7 +146,6 @@ tree40=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003
 tree41=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(75,0.2,11))
 bigtree29 = Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(60,0.2,11))
 bigtree30 = Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(64,0.2,11))
-bigtree31 = Entity(model='tree21.fbx', texture='tree21.png', scale=(0.007,0.007,0.007), position=(62,0.2,11))
 bigtree32 = Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(74,0.2,11))
 # Диапазон 6-15 (дом на 20, так что безопасно)
 tree42 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(8,0.2,-9))
@@ -268,22 +267,35 @@ tree93 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.0
 bigtree65 = Entity(model='tree03.fbx', texture='tree03.png', scale=(0.007,0.007,0.007), position=(60,0.2,-7))
 tree94 = Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(62,0.2,-12))
 tree95 = Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree97=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree98=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree99=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree100=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree101=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree102=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree103=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree104=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree105=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-# tree106=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(64,0.2,-8))
-
-
 tree96 = Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(88,0.2,-11))
-bigtree66 = Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(90,0.2,-7))
 tree97 = Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(92,0.2,-12))
 tree98 = Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(94,0.2,-8))
+tree99=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(0,0.2,-9))
+tree100=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(-1,0.2,-7))
+tree101=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(-2,0.2,-10))
+tree102=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(-3,0.2,-9))
+tree103=Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(-5,0.2,-8))
+tree104=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(3,0.2,-10))
+tree105=Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(1,0.2,-8))
+bigtree66 = Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(90,0.2,-7))
+bigtree67=Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(2,0.2,-8))
+bigtree68=Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(1,0.2,-9))
+bigtree69=Entity(model='tree21.fbx', texture='tree21.png', scale=(0.007,0.007,0.007), position=(-2,0.2,-7))
+bigtree70=Entity(model='tree03.fbx', texture='tree03.png', scale=(0.007,0.007,0.007), position=(-4,0.2,-10))
+
+tree106=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(0,0.2,9))
+tree107=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(-1,0.2,7))
+tree108=Entity(model='bush01.fbx', texture='bush01.png', scale=(0.003,0.003,0.003), position=(-2,0.2,10))
+tree109=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(-3,0.2,9))
+tree110=Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(-5,0.2,8))
+tree111=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.003,0.003,0.003), position=(3,0.2,10))
+tree112=Entity(model='bush02.fbx', texture='bush02.png', scale=(0.003,0.003,0.003), position=(1,0.2,8))
+bigtree71 = Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(90,0.2,7))
+bigtree72=Entity(model='tree18.fbx', texture='tree18.png', scale=(0.007,0.007,0.007), position=(2,0.2,8))
+bigtree73=Entity(model='tree19.fbx', texture='tree19.png', scale=(0.007,0.007,0.007), position=(1,0.2,9))
+bigtree74=Entity(model='tree21.fbx', texture='tree21.png', scale=(0.007,0.007,0.007), position=(-2,0.2,7))
+bigtree75=Entity(model='tree03.fbx', texture='tree03.png', scale=(0.007,0.007,0.007), position=(-4,0.2,10))
+
 back1=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(60,-0.4,30))
 back2=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(0,-0.4,30))
 back3=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(60,-0.4,-30))
@@ -294,9 +306,9 @@ houseOWN=Entity(model='house2.glb',scale=1.3,position=(-6,0.6,0),collider='box')
 window=Entity(model='cube',color=color.gray,collider='box',position=(-6.5,3,-3),scale=(1,3,2),shader=basic_lighting_shader)
 zabor1=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,0.7),shader=basic_lighting_shader)
 zabor2=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,-55),shader=basic_lighting_shader)
-print("=== Дочерние узлы модели ===")
-for child in zabor1.model.get_children():
-    print(child)
+# print("=== Дочерние узлы модели ===")
+# for child in zabor1.model.get_children():
+#     print(child)
 houseOWN.shader=basic_lighting_shader
 ground.shader = lit_with_shadows_shader
 humana.shader=lit_with_shadows_shader
@@ -336,71 +348,118 @@ press_e_text = Text(
 
 press_e_text.enabled = False
 
-
-dialogue_bg = Entity(parent=camera.ui, model='quad', scale=(1.6,1), y=-0.6,
+# Фон диалога
+dialogue_bg = Entity(parent=camera.ui, model='quad', scale=(1.6, 1.1), y=-0.6,
                      color=color.black66)
-
 dialogue_bg.enabled = False
 
+# Имя NPC сверху слева (отдельно от основного текста)
+npc_name = Text("Человек", parent=camera.ui, x=-0.7, y=-0.15,
+                origin=(-0.5, 0), scale=(2, 2), color=color.white, bold=True,font='4205.otf')
+npc_name.enabled = False
 
-npc_name = Text("Человек", parent=dialogue_bg, y=0.45,
-                origin=(0, 0), scale=(2,2),color=color.white,bold=True)
+# Основной текст диалога - сначала с текстом, потом wordwrap
+npc_line = Text(" ", parent=dialogue_bg, x=-0.4, y=0.35,  # Пробел как начальный текст
+                origin=(-0.5, 0), scale=1.2, color=color.white,font='4205.otf')
+npc_line.enabled = False
+# Устанавливаем wordwrap после создания с текстом
+npc_line.wordwrap = 30
 
-npc_line = Text("...", parent=dialogue_bg, y=0.4,
-                origin=(0, 0), scale=1.1, wordwrap=500)
-
-
+# Кнопки
 button1 = Button(text='Привет и пока', color=color.green, scale=(0.2, 0.08),
-                 position=(-0.15, -0.45), enabled=False)
+                 position=(-0.15, -0.45), enabled=False,font='4205.otf')
 button2 = Button(text='Пока', color=color.red, scale=(0.2, 0.08),
-                 position=(0.15, -0.45), enabled=False)
+                 position=(0.15, -0.45), enabled=False,font='4205.otf')
 button1.enabled = False
 button2.enabled = False
 
 in_dialogue = False
+current_text = ""
+text_progress = 0
+full_text = ""
+text_speed = 10  # символов за кадр
+
+
 def start_dialogue(npc_name_text, npc_line_text):
-    global in_dialogue
+    global in_dialogue, current_text, text_progress, full_text
 
     in_dialogue = True
     press_e_text.enabled = False
     player.enabled = False
 
-    # Настраиваем текст
     npc_name.text = npc_name_text
-    npc_line.text = npc_line_text
+    full_text = npc_line_text
+    current_text = ""
+    text_progress = 0
 
-    # Начальное состояние (невидимое)
     dialogue_bg.scale_x = 0.1
     dialogue_bg.scale_y = 0.1
     dialogue_bg.enabled = True
-    dialogue_bg.color = dialogue_bg.color.tint(0)  # Прозрачный
+    dialogue_bg.color = color.black66
 
-    # Скрываем кнопки и текст сначала
+
     npc_name.enabled = False
     npc_line.enabled = False
+    npc_line.text = " " 
     button1.enabled = False
     button2.enabled = False
+    walk.stop()
 
     def animate_dialogue():
         # Анимация фона
-        dialogue_bg.animate_scale((1.6, 1, 1), duration=0.6, curve=curve.out_quad)
-        dialogue_bg.animate_color(color.black66, duration=0.6)
+        dialogue_bg.animate_scale((1.6, 1.1, 1), duration=1.3, curve=curve.out_quad)
 
-        # Появление текста с задержкой
-        invoke(setattr, npc_name, 'enabled', True, delay=0.6)
-        invoke(setattr, npc_line, 'enabled', True, delay=0.8)
-        invoke(setattr, button1, 'enabled', True, delay=0.9)
-        invoke(setattr, button2, 'enabled', True, delay=0.9)
+        # Появление имени
+        invoke(setattr, npc_name, 'enabled', True, delay=1.5)
+
+        # Включаем поле текста и начинаем печать
+        invoke(setattr, npc_line, 'enabled', True, delay=1.8)
+        invoke(start_text_printing, delay=2)
 
     animate_dialogue()
 
 
+def start_text_printing():
+    global text_progress, current_text
+    text_progress = 0
+    current_text = ""
+    scene.text_printing_active = True
+
+
+def update_text_printing():
+    global text_progress, current_text
+
+    if hasattr(scene, 'text_printing_active') and scene.text_printing_active:
+        if text_progress < len(full_text):
+            text_progress = min(text_progress + text_speed * time.dt, len(full_text))
+            current_text = full_text[:int(text_progress)]
+            npc_line.text = current_text
+
+            # Включаем зацикленный звук
+            if not text_sound.playing:
+                text_sound.play()
+        else:
+            scene.text_printing_active = False
+            text_sound.stop()
+            button1.enabled = True
+            button2.enabled = True
+
 def close_dialogue():
     global in_dialogue
+    text_sound.stop()
+
+    def finish_close():
+        global in_dialogue
+        dialogue_bg.enabled = False
+        npc_name.enabled = False
+        npc_line.enabled = False
+        player.enabled = True
+        in_dialogue = False
+        if hasattr(scene, 'text_printing_active'):
+            scene.text_printing_active = False
 
     def animate_close():
         dialogue_bg.animate_scale((0.1, 0.1, 1), duration=0.6, curve=curve.in_quad)
-        dialogue_bg.animate_color(dialogue_bg.color.tint(0), duration=0.6)
 
         # Скрываем элементы
         npc_name.enabled = False
@@ -408,13 +467,9 @@ def close_dialogue():
         button1.enabled = False
         button2.enabled = False
 
-        invoke(lambda: setattr(dialogue_bg, 'enabled', False), delay=1.3)
-        invoke(lambda: setattr(player, 'enabled', True), delay=0.8)
-        # ИСПРАВЛЕННАЯ СТРОКА - убрали globals()
-        invoke(lambda: globals().update({'in_dialogue': False}), delay=0.6)
+        invoke(finish_close, delay=0.6)
 
     animate_close()
-
 
 
 def update():
@@ -422,6 +477,8 @@ def update():
 
     if in_dialogue:
         press_e_text.enabled = False
+        # Обновляем печать текста если активна
+        update_text_printing()
         return
 
     player_pos = player.position
@@ -436,19 +493,14 @@ def update():
                 4 <= player_pos.z <= 7.5)
 
     in_zone3 = (17.5 <= player_pos.x <= 22.8 and
-                    0.4 <= player_pos.y <= 0.7 and
-                    -6.5 <= player_pos.z <= -4)
-
-    # Отладка
-    # print(f"NPC1 - Hovered: {human_collider.hovered}, In zone: {in_zone1}")
-    # print(f"NPC2 - Hovered: {human_collidera.hovered}, In zone: {in_zone2}")
-    # print(f"NPC3 - Hovered: {human_colliderb.hovered}, In zone: {in_zone3}")
-    # print(f"Player: ({player_pos.x:.1f}, {player_pos.y:.1f}, {player_pos.z:.1f})")
+                0.4 <= player_pos.y <= 0.7 and
+                -6.5 <= player_pos.z <= -4)
 
     press_e_text.enabled = ((human_collider.hovered and in_zone1) or
                             (human_collidera.hovered and in_zone2) or
                             (human_colliderb.hovered and in_zone3))
-    walking=held_keys['a']or held_keys['w'] or held_keys['d']or held_keys['s']
+
+    walking = held_keys['a'] or held_keys['w'] or held_keys['d'] or held_keys['s']
     if walking and player.grounded:
         if not walk.playing:
             walk.play()
@@ -462,28 +514,24 @@ lvl = 1
 def switch_level():
     global lvl
     if lvl == 1:
-        # === ПЕРЕХОД НА НОЧЬ ===
         sun.color = color.rgb(0.16, 0.16, 0.24)
         AmbientLight(color=color.rgb(0.06, 0.06, 0.1))
         camera.background_color = color.rgb(0.01, 0.01, 0.04)
         Sky.texture = 'sky3.jpg'
         player.position = (0, 2, 0)
 
-        # Добавляем шейдеры ко всем объектам
         apply_shaders_to_all_objects()
 
 
         lvl = 2
         print("Переключено на ночь (уровень 2) - шейдеры включены")
     else:
-        # === ПЕРЕХОД НА ДЕНЬ ===
         sun.color = color.rgb(1.0, 0.95, 0.9)
         AmbientLight(color=color.rgb(0.6, 0.6, 0.6))
         camera.background_color = color.rgb(0.5, 0.7, 1.0)
         Sky.texture = 'sky_default'
         player.position = player.position
 
-        # Убираем шейдеры со всех объектов
         remove_shaders_from_all_objects()
 
         lvl = 1
@@ -494,19 +542,16 @@ def apply_shaders_to_all_objects():
     """Добавляет шейдер lit_with_shadows_shader ко всем объектам"""
     all_objects = []
 
-    # Добавляем все tree объекты
-    for i in range(1, 108):
+    for i in range(1, 113):
         obj_name = f'tree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
 
-    # Добавляем все bigtree объекты
-    for i in range(1, 67):
+    for i in range(1, 76):
         obj_name = f'bigtree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
 
-    # Добавляем back объекты
     for i in range(1, 7):
         obj_name = f'back{i}'
         if obj_name in globals():
@@ -535,19 +580,16 @@ def remove_shaders_from_all_objects():
     """Убирает шейдеры со всех объектов"""
     all_objects = []
 
-    # Добавляем все tree объекты
-    for i in range(1, 108):
+    for i in range(1, 113):
         obj_name = f'tree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
 
-    # Добавляем все bigtree объекты
-    for i in range(1, 67):
+    for i in range(1, 76):
         obj_name = f'bigtree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
 
-    # Добавляем back объекты
     for i in range(1, 7):
         obj_name = f'back{i}'
         if obj_name in globals():
@@ -562,7 +604,6 @@ def remove_shaders_from_all_objects():
             all_objects.append(globals()[obj_name])
 
 
-    # Убираем шейдеры со всех объектов
     for obj in all_objects:
         obj.shader = unlit_shader
         houseOWN.shader=basic_lighting_shader
@@ -621,6 +662,9 @@ def input(key):
 button1.on_click = close_dialogue
 button2.on_click = close_dialogue
 app.run()
+
+
+
 
 
 
