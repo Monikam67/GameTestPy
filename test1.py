@@ -10,10 +10,9 @@ loadPrcFileData('', 'clock-frame-rate 180')     # максимум FPS
 loadPrcFileData('', 'show-frame-rate-meter True')
 
 app=Ursina()
-
-walk=Audio('../walk.mp3', loop=True, autoplay=False)
+walk=Audio('../walk.mp3', loop=True, autoplay=False,volume=0.4)
 jump=Audio('../jump.mp3', loop=False, autoplay=False)
-text_sound = Audio('soundtext1.m4a', loop=True, autoplay=False)
+text_sound = Audio('soundtext1.m4a', loop=True, autoplay=False,volume=0.8)
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 player=FirstPersonController(collider='box')
 
@@ -347,13 +346,16 @@ press_e_text = Text(
 )
 
 press_e_text.enabled = False
-
+character_portrait = Entity(parent=camera.ui, model='quad', texture='person1.png', scale=(0.8, 1.2),
+                           x=-0.6, y=-0.2,z=0.1, enabled=False)
+main_character_portrait = Entity(parent=camera.ui,model='quad',texture='MainPerson.png',scale=(0.8, 1.2),x=0.6, y=-0.3,z=0.1,
+                                 enabled=False)
 # Фон диалога
-dialogue_bg = Entity(parent=camera.ui, model='quad', scale=(1.6, 1.1), y=-0.6,
-                     color=color.black66)
+dialogue_bg = Entity(parent=camera.ui, model='quad', scale=(2, 1.1), y=-0.6,z=0,
+                     color=color.rgba(0, 0, 0, 180))
 dialogue_bg.enabled = False
-
 # Имя NPC сверху слева (отдельно от основного текста)
+
 npc_name = Text("Человек", parent=camera.ui, x=-0.7, y=-0.15,
                 origin=(-0.5, 0), scale=(2, 2), color=color.white, bold=True,font='4205.otf')
 npc_name.enabled = False
@@ -366,20 +368,29 @@ npc_line.enabled = False
 npc_line.wordwrap = 30
 
 # Кнопки
-button1 = Button(text='Привет и пока', color=color.green, scale=(0.2, 0.08),
-                 position=(-0.15, -0.45), enabled=False,font='4205.otf')
-button2 = Button(text='Пока', color=color.red, scale=(0.2, 0.08),
-                 position=(0.15, -0.45), enabled=False,font='4205.otf')
+button1 = Button(text='Поговорить', color=color.green, scale=(0.2, 0.08),
+                 position=(-0.3, -0.45), enabled=False,font='4205.otf')
+button2 = Button(text='Напасть', color=color.red, scale=(0.2, 0.08),
+                 position=(0, -0.45), enabled=False,font='4205.otf')
+button3=Button(text='Уйти', color=color.gray, scale=(0.2, 0.08),
+                 position=(0.3, -0.45), enabled=False,font='4205.otf')
 button1.enabled = False
 button2.enabled = False
+button3.enabled=False
 
 in_dialogue = False
 current_text = ""
 text_progress = 0
 full_text = ""
 text_speed = 10  # символов за кадр
-
-
+dark_overlay = Entity(parent=camera.ui, model='quad', scale=(2, 2), color=color.black, alpha=0, enabled=False)
+main_character_portrait.render_queue=0
+character_portrait.render_queue = 0
+dialogue_bg.render_queue = 1
+npc_name.render_queue = 2
+npc_line.render_queue = 2
+npc_name.z = -0.1
+npc_line.z = -0.1
 def start_dialogue(npc_name_text, npc_line_text):
     global in_dialogue, current_text, text_progress, full_text
 
@@ -392,22 +403,40 @@ def start_dialogue(npc_name_text, npc_line_text):
     current_text = ""
     text_progress = 0
 
+    dark_overlay.enabled = True
+    character_portrait.enabled = True
+    main_character_portrait.enabled=True
+
     dialogue_bg.scale_x = 0.1
     dialogue_bg.scale_y = 0.1
     dialogue_bg.enabled = True
     dialogue_bg.color = color.black66
-
+    character_portrait.enabled = True
+    main_character_portrait.enabled = True
+    character_portrait.y = -0.3
+    main_character_portrait.y = -0.3
+    character_portrait.color = color.rgba(255, 255, 255, 0)
+    main_character_portrait.color = color.rgba(255, 255, 255, 0)
 
     npc_name.enabled = False
     npc_line.enabled = False
-    npc_line.text = " " 
+    npc_line.text = " "
     button1.enabled = False
     button2.enabled = False
+    button3.enabled=False
     walk.stop()
 
     def animate_dialogue():
         # Анимация фона
         dialogue_bg.animate_scale((1.6, 1.1, 1), duration=1.3, curve=curve.out_quad)
+
+        dark_overlay.animate_color(color.rgba(0, 0, 0, 0.7), duration=0.8)
+
+        character_portrait.animate_color(color.white, duration=1.5, delay=0.8, curve=curve.in_out_quad)
+        main_character_portrait.animate_color(color.white, duration=1.5, delay=0.8,curve=curve.in_out_quad)
+
+        character_portrait.animate_y(-0.1, duration=1.3, delay=0.3, curve=curve.out_cubic)
+        main_character_portrait.animate_y(-0.3, duration=1.3, delay=0.3, curve=curve.out_cubic)
 
         # Появление имени
         invoke(setattr, npc_name, 'enabled', True, delay=1.5)
@@ -415,6 +444,7 @@ def start_dialogue(npc_name_text, npc_line_text):
         # Включаем поле текста и начинаем печать
         invoke(setattr, npc_line, 'enabled', True, delay=1.8)
         invoke(start_text_printing, delay=2)
+
 
     animate_dialogue()
 
@@ -441,8 +471,40 @@ def update_text_printing():
         else:
             scene.text_printing_active = False
             text_sound.stop()
-            button1.enabled = True
-            button2.enabled = True
+            if button1.text == 'Поболтать':  # Если это второй диалог
+                button1.enabled = True
+                button2.enabled = True
+            else:  # Если это первый диалог
+                button1.enabled = True
+                button2.enabled = True
+                button3.enabled = True
+def setup_conversation_buttons():
+    global full_text, current_text, text_progress
+    button1.text = 'Поболтать'
+    button1.color = color.green
+    button1.x=-0.15
+    button2.text = 'Неважно'
+    button2.x=0.15
+    button2.color = color.gray
+    button3.enabled = False
+    button1.enabled = False
+    button2.enabled = False
+
+    full_text = "Круто выглядишь!"
+    npc_line.text = ""
+    current_text = ""
+    text_progress = 0
+
+    # Запускаем печать текста
+    invoke(start_text_printing, delay=0.5)
+
+
+    main_character_portrait.animate_y(-0.1, duration=1.2, curve=curve.out_cubic)
+    main_character_portrait.animate_color(color.rgba(1, 1, 1, 1), duration=1.2)
+
+    character_portrait.animate_y(-0.3, duration=1.2, curve=curve.in_out_cubic)
+    character_portrait.animate_color(color.rgba(1, 1, 1, 1), duration=1.2)
+
 
 def close_dialogue():
     global in_dialogue
@@ -454,20 +516,27 @@ def close_dialogue():
         npc_name.enabled = False
         npc_line.enabled = False
         player.enabled = True
+        dark_overlay.enabled = False
+        character_portrait.enabled = False
+        main_character_portrait.enabled = False
         in_dialogue = False
         if hasattr(scene, 'text_printing_active'):
             scene.text_printing_active = False
 
     def animate_close():
-        dialogue_bg.animate_scale((0.1, 0.1, 1), duration=0.6, curve=curve.in_quad)
+        dialogue_bg.animate_scale((0.1, 0.1, 1), duration=0.9, curve=curve.in_quad)
+        dark_overlay.animate_color(color.rgba(0, 0, 0, 0), duration=0.7)
+        character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        main_character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
 
         # Скрываем элементы
         npc_name.enabled = False
         npc_line.enabled = False
         button1.enabled = False
         button2.enabled = False
+        button3.enabled=False
 
-        invoke(finish_close, delay=0.6)
+        invoke(finish_close, delay=0.9)
 
     animate_close()
 
@@ -648,6 +717,8 @@ def input(key):
         close_dialogue()
     if key == '2' and in_dialogue:
         close_dialogue()
+    if key == '3' and in_dialogue:
+        close_dialogue()
     global lvl
     if key == 'p':
         switch_level()
@@ -659,9 +730,11 @@ def input(key):
 
 
 # Обновите также кнопки чтобы они использовали новую функцию закрытия:
-button1.on_click = close_dialogue
+button1.on_click = setup_conversation_buttons
 button2.on_click = close_dialogue
+button3.on_click = close_dialogue
 app.run()
+
 
 
 
