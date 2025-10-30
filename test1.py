@@ -5,6 +5,9 @@ from direct.filter.CommonFilters import CommonFilters
 from panda3d.core import loadPrcFileData
 from ursina import Entity
 import random
+import pygame
+import threading
+import time
 loadPrcFileData('', 'sync-video False')         # отключает VSync       # ограничение FPS
 loadPrcFileData('', 'clock-frame-rate 180')     # максимум FPS
 loadPrcFileData('', 'show-frame-rate-meter True')
@@ -16,13 +19,14 @@ jump=Audio('../jump.mp3', loop=False, autoplay=False)
 text_sound = Audio('soundtext1.m4a', loop=True, autoplay=False,volume=0.8)
 hit_sound = Audio('2.mp3', loop=False, autoplay=False)
 miss_sound = Audio('1.mp3', loop=False, autoplay=False)
-battle_sound = Audio('battlesound.mp3', loop=True, autoplay=False)
+battle_sound = Audio('battlesound.ogg', loop=True, autoplay=False)
 battle_reaction_sound = Audio('battlereaction.ogg', loop=False, autoplay=False)
 battle2_sound = Audio('battle2.ogg', loop=False, autoplay=False)
 attack2_sound = Audio('attack2.ogg', loop=False, autoplay=False)
 bg_music = Audio('BG.ogg', loop=True, autoplay=False)
-bg_music.play()
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
+
+
 player=FirstPersonController(collider='box')
 
 
@@ -38,11 +42,6 @@ filters.setBloom(intensity=1)
 
 # StartHome=Entity(model='StartHome.glb', scale=2, position=(1,0.2,0),collider='mesh')
 
-def init_game():
-    if not bg_music.playing:
-        bg_music.play()
-
-init_game()
 
 
 
@@ -379,28 +378,35 @@ npc_line.enabled = False
 npc_line.wordwrap = 30
 
 # Кнопки боя
-weak_attack_btn = Button(text='Слабая атака', color=color.orange, scale=(0.25, 0.08),
+weak_attack_btn = Button(text='Слабая атака', color=color.dark_gray, scale=(0.25, 0.08),
                         position=(-0.3, -0.45), enabled=False, font='4205.otf')
-strong_attack_btn = Button(text='Сильная атака', color=color.red, scale=(0.25, 0.08),
+weak_attack_btn.text_entity.font = '4205.otf'
+strong_attack_btn = Button(text='Сильная атака', color=color.dark_gray, scale=(0.25, 0.08),
                           position=(0, -0.45), enabled=False, font='4205.otf')
-surrender_btn = Button(text='Сдаться', color=color.gray, scale=(0.25, 0.08),
+strong_attack_btn.text_entity.font = '4205.otf'
+surrender_btn = Button(text='Сдаться', color=color.red, scale=(0.25, 0.08),
                       position=(0.3, -0.45), enabled=False, font='4205.otf')
+surrender_btn.text_entity.font = '4205.otf'
 
 weak_attack_btn.enabled = False
 strong_attack_btn.enabled = False
 surrender_btn.enabled = False
-weak_attack_btn.render_queue = 2
-strong_attack_btn.render_queue = 2
-surrender_btn.render_queue = 2
+weak_attack_btn.render_queue = 1
+strong_attack_btn.render_queue = 1
+surrender_btn.render_queue = 1
+
 weak_attack_btn.z = -0.1
 strong_attack_btn.z = -0.1
 surrender_btn.z = -0.1
 button1 = Button(text='Поговорить', color=color.green, scale=(0.2, 0.08),
                  position=(-0.3, -0.45), enabled=False, font='4205.otf')
+button1.text_entity.font = '4205.otf'
 button2 = Button(text='Напасть', color=color.red, scale=(0.2, 0.08),
                  position=(0, -0.45), enabled=False, font='4205.otf')
+button2.text_entity.font = '4205.otf'
 button3 = Button(text='Уйти', color=color.gray, scale=(0.2, 0.08),
                  position=(0.3, -0.45), enabled=False, font='4205.otf')
+button3.text_entity.font = '4205.otf'
 button1.enabled = False
 button2.enabled = False
 button3.enabled = False
@@ -408,9 +414,10 @@ button3.enabled = False
 
 talk_button = Button(text='Поболтать', color=color.green, scale=(0.2, 0.08),
                      position=(-0.15, -0.45), enabled=False, font='4205.otf')
+talk_button.text_entity.font = '4205.otf'
 dont_care_button = Button(text='Неважно', color=color.gray, scale=(0.2, 0.08),
                           position=(0.15, -0.45), enabled=False, font='4205.otf')
-
+dont_care_button.text_entity.font = '4205.otf'
 talk_button.enabled = False
 dont_care_button.enabled = False
 
@@ -441,7 +448,9 @@ last_x_press_time = 0
 x_cooldown = 0.2
 enemy_portrait = None
 player_battle_portrait = None
+battle_background=None
 enemy_hp_text = None
+enemy_decorate=None
 enemy_hp = 150
 talk_button.render_queue = 2
 dont_care_button.render_queue = 2
@@ -449,12 +458,144 @@ talk_button.z = -0.1
 dont_care_button.z = -0.1
 hit_text = None
 
+
+class PygameSoundManager:
+    def __init__(self):
+        pygame.mixer.init()
+        self.battle_active = False
+        self.background_active = False
+        self.battle_sound_thread = None
+        self.background_sound_thread = None
+
+        # Создаем отдельные каналы для разных звуков
+        self.battle_channel = pygame.mixer.Channel(0)
+        self.background_channel = pygame.mixer.Channel(1)
+
+        self.battle_sound = None
+        self.background_sound = None
+
+        # Текущие громкости
+        self.battle_volume = 0.7
+        self.background_volume = 1
+
+    def play_background_sound(self):
+        """Запускает фоновый звук BG.ogg"""
+        self.stop_background_sound()
+        self.background_active = True
+
+        def background_loop():
+            try:
+                self.background_sound = pygame.mixer.Sound('BG.ogg')
+                self.background_channel.set_volume(self.background_volume)
+                while self.background_active:
+                    if not self.background_channel.get_busy():
+                        self.background_channel.play(self.background_sound)
+                    time.sleep(0.5)
+            except Exception as e:
+                print(f"Background sound error: {e}")
+
+        self.background_sound_thread = threading.Thread(target=background_loop, daemon=True)
+        self.background_sound_thread.start()
+        print(f"🎵 Pygame background sound started (volume: {self.background_volume})")
+
+    def play_battle_sound(self):
+        """Запускает боевой звук battlesound.ogg"""
+        self.stop_battle_sound()
+        self.battle_active = True
+
+        def battle_loop():
+            try:
+                self.battle_sound = pygame.mixer.Sound('battlesound.ogg')
+                self.battle_channel.set_volume(self.battle_volume)
+                while self.battle_active:
+                    if not self.battle_channel.get_busy():
+                        self.battle_channel.play(self.battle_sound)
+                    time.sleep(0.5)
+            except Exception as e:
+                print(f"Battle sound error: {e}")
+
+        self.battle_sound_thread = threading.Thread(target=battle_loop, daemon=True)
+        self.battle_sound_thread.start()
+        print(f"⚔️ Pygame battle sound started (volume: {self.battle_volume})")
+
+    # Методы для управления громкостью фоновой музыки
+    def set_background_volume(self, volume):
+        """Устанавливает громкость фоновой музыки (0.0 - 1.0)"""
+        if 0.0 <= volume <= 1.0:
+            self.background_volume = volume
+            self.background_channel.set_volume(volume)
+            print(f"🔊 Background volume set to: {volume}")
+        else:
+            print("❌ Volume must be between 0.0 and 1.0")
+
+    def get_background_volume(self):
+        """Возвращает текущую громкость фоновой музыки"""
+        return self.background_volume
+
+    # Методы для управления громкостью боевого звука
+    def set_battle_volume(self, volume):
+        """Устанавливает громкость боевого звука (0.0 - 1.0)"""
+        if 0.0 <= volume <= 1.0:
+            self.battle_volume = volume
+            self.battle_channel.set_volume(volume)
+            print(f"🔊 Battle volume set to: {volume}")
+        else:
+            print("❌ Volume must be between 0.0 and 1.0")
+
+    def get_battle_volume(self):
+        """Возвращает текущую громкость боевого звука"""
+        return self.battle_volume
+
+    # Методы остановки
+    def stop_background_sound(self):
+        """Останавливает фоновый звук"""
+        self.background_active = False
+        self.background_channel.stop()
+        print("🔇 Pygame background sound stopped")
+
+    def stop_battle_sound(self):
+        """Останавливает боевой звук"""
+        self.battle_active = False
+        self.battle_channel.stop()
+        print("🔇 Pygame battle sound stopped")
+
+    def stop_all_sounds(self):
+        """Останавливает все звуки"""
+        self.stop_background_sound()
+        self.stop_battle_sound()
+        print("🔇 All pygame sounds stopped")
+
+    # Пресеты громкости для удобства
+    def set_volume_preset(self, preset_name):
+        """Устанавливает громкость по пресету для обоих звуков"""
+        presets = {
+            'normal': {'background': 0.5, 'battle': 0.7},
+            'quiet': {'background': 0.3, 'battle': 0.4},
+            'loud': {'background': 0.8, 'battle': 0.9},
+            'menu': {'background': 0.2, 'battle': 0.0},
+            'battle_focus': {'background': 0.3, 'battle': 0.8},
+            'exploration': {'background': 0.6, 'battle': 0.0}
+        }
+
+        if preset_name in presets:
+            bg_vol = presets[preset_name]['background']
+            battle_vol = presets[preset_name]['battle']
+
+            self.set_background_volume(bg_vol)
+            self.set_battle_volume(battle_vol)
+            print(f"🔊 Preset '{preset_name}' applied")
+
+# Используйте этот менеджер вместо Ursina Audio
+sound_manager = PygameSoundManager()
+sound_manager.play_background_sound()
+
+
+
 def start_dialogue(npc_name_text, npc_line_text):
     global in_dialogue, current_text, text_progress, full_text, dialogue_stage,active_speaker
     dialogue_stage = 1  # Сбрасываем на первый этап
     active_speaker = "npc"
-    if bg_music.playing:
-        bg_music.volume=0.4
+    sound_manager.set_background_volume(0.5)
 
     in_dialogue = True
     press_e_text.enabled = False
@@ -627,21 +768,17 @@ def dont_care_action():
 
 def close_dialogue():
     global in_dialogue, dialogue_stage, battle_active
-    global enemy_portrait, player_battle_portrait, enemy_hp_text, enemy_hp
+    global enemy_portrait, player_battle_portrait, enemy_hp_text, enemy_hp,battle_background,enemy_decorate
 
     def finish_close():
         global in_dialogue, battle_active, enemy_hp
-        global enemy_portrait, player_battle_portrait, enemy_hp_text
-        if battle_sound.playing:
-            battle_sound.stop()
+        global enemy_portrait, player_battle_portrait, enemy_hp_text,battle_background,enemy_decorate
+        sound_manager.stop_battle_sound()
         if battle2_sound.playing:
             battle2_sound.stop()
         if battle_reaction_sound.playing:
             battle_reaction_sound.stop()
-        if not bg_music.playing and not in_dialogue:
-            bg_music.play()
-        if bg_music.playing:
-            bg_music.volume = 1.0
+        sound_manager.set_background_volume(1)
         dialogue_bg.enabled = False
         npc_name.enabled = False
         npc_line.enabled = False
@@ -649,6 +786,8 @@ def close_dialogue():
         dark_overlay.enabled = False
         character_portrait.enabled = False
         main_character_portrait.enabled = False
+        enemy_decorate=False
+        battle_background=False
         in_dialogue = False
         battle_active = False
 
@@ -672,6 +811,12 @@ def close_dialogue():
         if enemy_hp_text:
             destroy(enemy_hp_text)
             enemy_hp_text = None
+        if battle_background:
+            destroy(battle_background)
+            battle_background = None
+        if enemy_decorate:
+            destroy(enemy_decorate)
+            enemy_decorate=None
 
         # Сбрасываем HP врага
         enemy_hp = 150
@@ -684,6 +829,8 @@ def close_dialogue():
         dark_overlay.animate_color(color.rgba(0, 0, 0, 0), duration=0.7)
         character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
         main_character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        battle_background.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        enemy_decorate.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
 
 
         npc_name.enabled = False
@@ -703,11 +850,11 @@ battle_active = False
 
 
 def start_battle():
-    global battle_active, full_text, current_text, text_progress, enemy_portrait, player_battle_portrait, enemy_hp_text
+    global battle_active, full_text, current_text, text_progress, enemy_portrait, player_battle_portrait, enemy_hp_text,battle_background,\
+        enemy_decorate
 
     battle_active = True
-    if bg_music.playing:
-        bg_music.stop()
+    sound_manager.stop_background_sound()
     if not battle_reaction_sound.playing:
         battle_reaction_sound.play()
     button1.enabled = False
@@ -745,16 +892,16 @@ def start_battle():
 
 
 def create_battle_interface():
-    global enemy_portrait, player_battle_portrait, enemy_hp_text
+    global enemy_portrait, player_battle_portrait, enemy_hp_text,battle_background,enemy_decorate
 
     # -----------------------------
     # Фон диалога
     # -----------------------------
     dialogue_bg.y = -0.6
     dialogue_bg.color = color.black66
-    dialogue_bg.scale = (1.6, 1.1)
+    dialogue_bg.scale = (1.6, 0.8)
     dialogue_bg.enabled = True
-    dialogue_bg.animate_scale((1.6, 1.1, 1), duration=1.3, curve=curve.out_quad)
+    dialogue_bg.animate_scale((1.6, 0.8, 1), duration=1.3, curve=curve.out_quad)
     dark_overlay.animate_color(color.rgba(0, 0, 0, 0.7), duration=0.8)
 
     # -----------------------------
@@ -764,11 +911,11 @@ def create_battle_interface():
         parent=camera.ui,
         model='quad',
         texture='personenemy.png',
-        scale=(0.4, 0.4),
-        x=-0.6,
-        y=-0.27
+        scale=(0.30, 0.30),
+        x=-0.61,
+        y=-0.38
     )
-    player_battle_portrait.color = color.rgba(255, 255, 255, 0)
+    player_battle_portrait.color = color.rgba(1, 1, 1, 0)
     player_battle_portrait.animate_color(color.white, duration=1.0, delay=0.5)
 
     # -----------------------------
@@ -778,11 +925,11 @@ def create_battle_interface():
         parent=camera.ui,
         model='quad',
         texture='enemy1.png',
-        scale=(0.4, 0.4),
-        x=0.6,
-        y=-0.27
+        scale=(0.3, 0.3),
+        x=0.61,
+        y=-0.38
     )
-    enemy_portrait.color = color.rgba(255, 255, 255, 0)
+    enemy_portrait.color = color.rgba(1, 1, 1, 0)
     enemy_portrait.animate_color(color.white, duration=1.0, delay=0.5)
 
     # -----------------------------
@@ -791,14 +938,38 @@ def create_battle_interface():
     enemy_hp_text = Text(
         parent=camera.ui,
         text="HP: 150",
-        position=(0.6, -1.0),
+        position=(0.6, -1),
         scale=1.3,
         color=color.red,
         font='4205.otf'
     )
     enemy_hp_text.enabled = True
     # Анимация подъема текста на нужную позицию
-    enemy_hp_text.animate_position((0.2, -0.3), duration=1.0, delay=0.5, curve=curve.out_quad)
+    enemy_hp_text.animate_position((0.3, -0.3), duration=1.0, delay=0.5, curve=curve.out_quad)
+    # Враг на фоне
+    enemy_decorate = Entity(
+        parent=camera.ui,
+        model='quad',
+        texture='enemy_decorate1.png',
+        scale=(0.6, 0.6),
+        x=0,
+        y=0.1,
+        z=0
+    )
+    enemy_decorate.color = color.rgba(1, 1, 1, 0)
+    enemy_decorate.animate_color(color.white, duration=1.0, delay=0.5)
+    # Задний фон
+    battle_background=Entity(
+        parent=camera.ui,
+        model='quad',
+        texture='battleback1.png',
+        scale=(2,1),
+        x=0,
+        y=0,
+        z=1
+    )
+
+
 
     # -----------------------------
     # Кнопки боя
@@ -806,36 +977,31 @@ def create_battle_interface():
     def show_battle_buttons():
         if battle2_sound.playing:
             battle2_sound.stop()
-        if not battle_sound.playing:
-            battle_sound.play()
+            # ВКЛЮЧАЕМ ГЛОБАЛЬНЫЙ ЗВУК БИТВЫ
+        sound_manager.play_battle_sound()
         weak_attack_btn.enabled = True
         strong_attack_btn.enabled = True
         surrender_btn.enabled = True
 
-        weak_attack_btn.x = -0.2
-        strong_attack_btn.x = -0.2
-        surrender_btn.x = -0.2
+        weak_attack_btn.x = -0.25
+        strong_attack_btn.x = -0.25
+        surrender_btn.x = -0.25
 
-        weak_attack_btn.y = -0.2
-        strong_attack_btn.y = -0.3
-        surrender_btn.y = -0.4
+        weak_attack_btn.y = -0.25
+        strong_attack_btn.y = -0.35
+        surrender_btn.y = -0.45
 
     invoke(show_battle_buttons, delay=1.0)
 def weak_attack_action():
     #Слабая атака - просто закрываем диалог
     global battle_active
-
     battle_active = False
-
-    if battle_sound.playing:
-        battle_sound.stop()
+    sound_manager.stop_battle_sound()
+    sound_manager.play_background_sound()
     if battle2_sound.playing:
         battle2_sound.stop()
     if battle_reaction_sound.playing:
         battle_reaction_sound.stop()
-
-    if not bg_music.playing:
-        bg_music.play()
 
     weak_attack_btn.enabled = False
     strong_attack_btn.enabled = False
@@ -846,7 +1012,7 @@ def weak_attack_action():
 
 def strong_attack_action():
     #Сильная атака - запускаем мини-игру с анимацией
-    global battle_active, dialogue_bg, player_battle_portrait, enemy_portrait, enemy_hp_text
+    global battle_active, dialogue_bg, player_battle_portrait, enemy_portrait, enemy_hp_text,battle_background
 
     weak_attack_btn.enabled = False
     strong_attack_btn.enabled = False
@@ -872,16 +1038,12 @@ def surrender_action():
     global battle_active
 
     battle_active = False
-
-    if battle_sound.playing:
-        battle_sound.stop()
+    sound_manager.stop_battle_sound()
+    sound_manager.play_background_sound()
     if battle2_sound.playing:
         battle2_sound.stop()
     if battle_reaction_sound.playing:
         battle_reaction_sound.stop()
-
-    if not bg_music.playing:
-        bg_music.play()
 
     weak_attack_btn.enabled = False
     strong_attack_btn.enabled = False
@@ -997,14 +1159,17 @@ def stop_minigame_hand():
                 hit_sound.play()
 
             if hits == 1:
-                rating_text = "Good"
-                text_color = color.green
+                rating_text = "Kill"
+                text_color = color.red
+
             elif hits == 2:
-                rating_text = "Great"
-                text_color = color.yellow
+                rating_text = "Kill"
+                text_color = color.red
+
             elif hits == 3:
-                rating_text = "Fine"
-                text_color = color.orange
+                rating_text = "Kill"
+                text_color = color.red
+
             else:
                 rating_text = ""
                 text_color = color.white
@@ -1020,6 +1185,7 @@ def stop_minigame_hand():
                 scale=0.1,
                 color=text_color,
                 background=True,
+                font='4205.otf',
                 background_color=color.rgba(0, 0, 0, 150)
             )
             hit_text.z = -3
@@ -1058,8 +1224,6 @@ def end_minigame():
         destroy(hit_text)
         hit_text = None
 
-    if not attack2_sound.playing:
-        attack2_sound.play()
 
     if minigame_ui:
         destroy(minigame_ui)
@@ -1070,17 +1234,33 @@ def end_minigame():
 
     print("🎯 Мини-игра завершена!")
 
+    def enemy_hit_animation():
+        if enemy_decorate:
+            original_x = enemy_decorate.x
+            for i in range(6):
+                invoke(setattr, enemy_decorate, 'x', original_x + (0.02 if i % 2 == 0 else -0.02), delay=i * 0.05)
+            invoke(setattr, enemy_decorate, 'x', original_x, delay=0.3)
+            # Мелькание
+            enemy_decorate.animate_color(color.rgb(1, 0.2, 0.2), duration=0.1)
+            invoke(enemy_decorate.animate_color, color.white, 0.2, delay=0.1)
+        if not attack2_sound.playing:
+            attack2_sound.play()
+
 
     def animate_dialogue_up():
 
         dialogue_bg.animate_y(-0.6, duration=0.8, curve=curve.out_quad)
 
         if player_battle_portrait:
-            player_battle_portrait.animate_y(-0.27, duration=0.8, curve=curve.out_quad)
+            player_battle_portrait.animate_y(-0.38, duration=0.8, curve=curve.out_quad)
+            player_battle_portrait.animate_x(-0.61, duration=0.8, curve=curve.out_quad)
         if enemy_portrait:
-            enemy_portrait.animate_y(-0.27, duration=0.8, curve=curve.out_quad)
+            enemy_portrait.animate_y(-0.38, duration=0.8, curve=curve.out_quad)
+            enemy_portrait.animate_x(0.61, duration=0.8, curve=curve.out_quad)
         if enemy_hp_text:
-            enemy_hp_text.animate_position((0.2, -0.3), duration=0.8, curve=curve.out_quad)
+            enemy_hp_text.animate_position((0.3, -0.3), duration=0.8, curve=curve.out_quad)
+        if enemy_decorate:
+            enemy_decorate.animate_y(0.1,duration=0.8, curve=curve.out_quad)
 
 
         def show_buttons_again():
@@ -1090,18 +1270,19 @@ def end_minigame():
             strong_attack_btn.enabled = True
             surrender_btn.enabled = True
 
-            weak_attack_btn.x = -0.2
-            strong_attack_btn.x = -0.2
-            surrender_btn.x = -0.2
+            weak_attack_btn.x = -0.25
+            strong_attack_btn.x = -0.25
+            surrender_btn.x = -0.25
 
-            weak_attack_btn.y = -0.2
-            strong_attack_btn.y = -0.3
-            surrender_btn.y = -0.4
+            weak_attack_btn.y = -0.25
+            strong_attack_btn.y = -0.35
+            surrender_btn.y = -0.45
 
             if hits >= 3:
                 enemy_hp -= 30
                 if enemy_hp_text:
                     enemy_hp_text.text = f"HP: {enemy_hp}"
+                enemy_hit_animation()
 
         invoke(show_buttons_again, delay=0.9)
 
@@ -1322,10 +1503,6 @@ strong_attack_btn.on_click = strong_attack_action
 surrender_btn.on_click = surrender_action
 
 app.run()
-
-
-
-
 
 
 
