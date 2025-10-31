@@ -475,8 +475,8 @@ class PygameSoundManager:
         self.background_sound = None
 
         # Текущие громкости
-        self.battle_volume = 0.7
-        self.background_volume = 1
+        self.battle_volume = 0.5
+        self.background_volume = 0.7
 
     def play_background_sound(self):
         """Запускает фоновый звук BG.ogg"""
@@ -1503,6 +1503,7 @@ strong_attack_btn.on_click = strong_attack_action
 surrender_btn.on_click = surrender_action
 
 app.run()
+
 
 
 
