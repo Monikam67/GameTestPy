@@ -24,6 +24,7 @@ battle_reaction_sound = Audio('battlereaction.ogg', loop=False, autoplay=False)
 battle2_sound = Audio('battle2.ogg', loop=False, autoplay=False)
 attack2_sound = Audio('attack2.ogg', loop=False, autoplay=False)
 bg_music = Audio('BG.ogg', loop=True, autoplay=False)
+bossa_sound=Audio('bossa_sound.mp3', loop=True, autoplay=False)
 ground=Entity(model='cube',collider='mesh',texture='grass',scale=(500,1,100))
 
 
@@ -67,7 +68,9 @@ headb=Entity(parent=humana,model='sphere',texture='face.jpg',scale=(0.7,0.7,0.7)
 bodyb= Entity(parent=humana,model='sphere',texture='body.png',scale=(1,2,1),rotation=(0,-90,0),position=(10,1,-11))
 rightb=Entity(parent=humana,model='sphere',texture='body.png',scale=(0.5,2,0.5),rotation=(30,-120,0),position=(10.7,1,-11))
 human_colliderb=Entity(parent=humana,model='cube',position=(10,1,-11),scale=(1,2,1),color=color.clear,collider='box')
-all_npcs = [human_collider, human_collidera,human_colliderb,human_colliderb]
+bossa=Entity(parent=scene,position=(13.12,12.4,15.47),model='sphere',texture='face.jpg',scale=(2,2,2),rotation=(0,90,0))
+bossa_collider=Entity(position=(13.12,10,15.47),model='cube',scale=(2,9,2),color=color.clear,collider='box')
+all_npcs = [human_collider, human_collidera,human_colliderb,human_colliderb,bossa_collider]
 
 
 human2 = Entity(parent=scene,model='human.fbx',scale=0.1,position=(5, 1, 1),rotation_y=180,texture='human1.png',collider='sphere')
@@ -84,9 +87,9 @@ house8=Entity(model='house.glb',scale=1.0,position=(110,0.6,-20),rotation=(0,180
 roada=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(20,0.2,0),collider='box',shader=lit_with_shadows_shader)
 roadb=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(60,0.2,0),collider='box',shader=lit_with_shadows_shader)
 roadc=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(100,0.2,0),collider='box',shader=lit_with_shadows_shader)
-roadd=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(140,0.2,0),collider='box',shader=lit_with_shadows_shader)
-roade=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(180,0.2,0),collider='box',shader=lit_with_shadows_shader)
-roadf=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(220,0.2,0),collider='box',shader=lit_with_shadows_shader)
+# roadd=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(140,0.2,0),collider='box',shader=lit_with_shadows_shader)
+# roade=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(180,0.2,0),collider='box',shader=lit_with_shadows_shader)
+# roadf=Entity(model='cube',texture='road1.jpg',scale=(40,1,5),position=(220,0.2,0),collider='box',shader=lit_with_shadows_shader)
 trotuara=Entity(model='cube',texture='trotuar.jpg',scale=(20,1,2),position=(10,0.1,5),collider='box',shader=lit_with_shadows_shader)
 trotuarb=Entity(model='cube',texture='trotuar.jpg',scale=(20,1,2),position=(30,0.1,5),collider='box',shader=lit_with_shadows_shader)
 trotuarc=Entity(model='cube',texture='trotuar.jpg',scale=(20,1,2),position=(50,0.1,5),collider='box',shader=lit_with_shadows_shader)
@@ -309,14 +312,51 @@ back1=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), 
 back2=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(0,-0.4,30))
 back3=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(60,-0.4,-30))
 back4=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(0,-0.4,-30))
-back5=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(-30,0,0),rotation=(0,90,0))
-back6=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(140,0,0),rotation=(0,90,0))
+back5=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(80,0,30))
+back6=Entity(model='bush04.fbx', texture='bush04.png', scale=(0.1,0.031,0.030), position=(90,0,-30))
 houseOWN=Entity(model='house2.glb',scale=1.3,position=(-6,0.6,0),collider='box')
 window=Entity(model='cube',color=color.gray,collider='box',position=(-6.5,3,-3),scale=(1,3,2),shader=basic_lighting_shader)
 zabor1=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,0.7),shader=basic_lighting_shader)
 zabor2=Entity(model='zabor2.glb', scale=(0.01,0.03,0.08), position=(-15,1,-55),shader=basic_lighting_shader)
+zabor3=Entity(model='zabor2.glb', scale=(0.01,0.05,0.08), position=(140,1,0),rotation=(0,180,0),shader=basic_lighting_shader)
+zabor4=Entity(model='zabor2.glb', scale=(0.01,0.05,0.08), position=(140,1,55),rotation=(0,180,0),shader=basic_lighting_shader)
+zabor5=Entity(model='zabor3.glb', scale=1, position=(116,0.5,10),rotation=(0,0,0),shader=basic_lighting_shader)
+zabor6=Entity(model='zabor2.glb', scale=(0.01,0.05,0.08), position=(100,1,-5),rotation=(0,-270,0),shader=basic_lighting_shader)
+zabor7=Entity(model='zabor2.glb', scale=(0.01,0.05,0.08), position=(100,1,50),rotation=(0,90,0),shader=basic_lighting_shader)
+zabor8=Entity(model='zabor4.glb', scale=1.3, position=(120,0,30),rotation=(0,-30,0),shader=basic_lighting_shader)
+questhouse=Entity(model='questhouse.glb',scale=1.5,position=(130,1.5,0),rotation=(0,180,0),shader=basic_lighting_shader)
+collider_questhouse1=Entity(model='cube',position=(124,-1,2.5),scale=(2.5,100,2.5),rotation=(0,0,55),color=color.clear,collider='box')
+collider_questhouse2=Entity(model='cube',position=(129,1,2.5),scale=(2,20,20),rotation=(0,0,0),color=color.clear,collider='box')
+collider_door1=Entity(model='cube',position=(129,4,2.5),scale=(1,4,4),rotation=(0,0,0),color=color.clear,collider='box')
+questhouseinside=Entity(model='questhouse_inside.glb',scale=0.06,position=(10,10,10),shader=basic_lighting_shader)
+questhouseinside_collider1=Entity(model='cube',scale=(20,1,20),position=(10,9.5,10),color=color.clear,collider='box')
+questhouseinside_collider2=Entity(model='cube',scale=(10,8,0.8),position=(10.34,10,10.1),color=color.clear,collider='box')
+questhouseinside_collider3=Entity(model='cube',scale=(15,8,0.8),position=(16.04,10,10.11),rotation=(0,90,0),color=color.clear,collider='box')
+questhouseinside_collider4=Entity(model='cube',scale=(2,2.1,1.7),position=(14.64,10,11.29),rotation=(0,90,0),color=color.clear,collider='box')
+questhouseinside_collider5=Entity(model='cube',scale=(10,3,0.8),position=(16.04,10,10.11),rotation=(0,90,0),color=color.clear,collider='box')
+questhouseinside_collider6=Entity(model='cube',scale=(20,8,0.8),position=(15.98,10,16.97),color=color.clear,collider='box')
+questhouseinside_collider7=Entity(model='cube',scale=(20,8,0.9),position=(10.35,10,16.84),rotation=(0,270,0),color=color.clear,collider='box')
+questhouseinside_collider8=Entity(model='cube',scale=(2.5,2.1,1.5),position=(12.48,10,14.38),color=color.clear,collider='box')
+questhouseinside_collider9=Entity(model='cube',scale=(1.4,8,1.4),position=(11.02,10,13.64),rotation=(0,90,0),color=color.clear,collider='box')
+questhouseinside_collider10=Entity(model='cube',scale=(1,8,1),position=(10,10,14.64),rotation=(0,90,0),color=color.black,collider='box')
+collider_door2=Entity(model='cube',scale=(0.5,6,2),position=(7,11,11.4),color=color.clear,collider='box')
+questhouseinside.enabled=False
+questhouseinside_collider1.enabled=False
+questhouseinside_collider2.enabled=False
+questhouseinside_collider3.enabled=False
+questhouseinside_collider4.enabled=False
+questhouseinside_collider5.enabled=False
+questhouseinside_collider6.enabled=False
+questhouseinside_collider7.enabled=False
+questhouseinside_collider8.enabled=False
+questhouseinside_collider9.enabled=False
+questhouseinside_collider10.enabled=False
+bossa.enabled=False
+
+
+
 # print("=== Дочерние узлы модели ===")
-# for child in zabor1.model.get_children():
+# for child in questhouseinside.model.get_children():
 #     print(child)
 houseOWN.shader=basic_lighting_shader
 ground.shader = lit_with_shadows_shader
@@ -336,7 +376,32 @@ moon = Entity(
 )
 
 
-
+door_text = Text(
+    text='>> ВОЙТИ? <<',
+    position=(0, 0.3),
+    origin=(0, 0),
+    scale=1.8,
+    color=color.azure,
+    background=True,
+    background_color=color.rgba(0, 0, 0, 200),
+    background_padding=(0.3, 0.2),
+    border_color=color.cyan,
+    border_width=2,
+    enabled=False
+)
+door_text2 = Text(
+    text='>> ВОЙТИ? <<',
+    position=(0, 0.3),
+    origin=(0, 0),
+    scale=1.8,
+    color=color.azure,
+    background=True,
+    background_color=color.rgba(0, 0, 0, 200),
+    background_padding=(0.3, 0.2),
+    border_color=color.cyan,
+    border_width=2,
+    enabled=False
+)
 
 
 
@@ -440,7 +505,7 @@ minigame_active = False
 minigame_ui = None
 zones = []
 pointer = None
-rotation_speed = 240  # градусов в секунду
+rotation_speed = 480  # градусов в секунду
 hits = 0
 attempts = 4
 
@@ -464,19 +529,24 @@ class PygameSoundManager:
         pygame.mixer.init()
         self.battle_active = False
         self.background_active = False
+        self.bossa_active = False
         self.battle_sound_thread = None
         self.background_sound_thread = None
+        self.bossa_sound_thread = None
 
         # Создаем отдельные каналы для разных звуков
         self.battle_channel = pygame.mixer.Channel(0)
         self.background_channel = pygame.mixer.Channel(1)
+        self.bossa_channel = pygame.mixer.Channel(2)
 
         self.battle_sound = None
         self.background_sound = None
+        self.bossa_sound = None
 
         # Текущие громкости
         self.battle_volume = 0.5
         self.background_volume = 0.7
+        self.bossa_volume = 0.6
 
     def play_background_sound(self):
         """Запускает фоновый звук BG.ogg"""
@@ -518,6 +588,26 @@ class PygameSoundManager:
         self.battle_sound_thread.start()
         print(f"⚔️ Pygame battle sound started (volume: {self.battle_volume})")
 
+    def play_bossa_sound(self):
+        """Запускает босса-нову звук bossa_sound.mp3"""
+        self.stop_bossa_sound()
+        self.bossa_active = True
+
+        def bossa_loop():
+            try:
+                self.bossa_sound = pygame.mixer.Sound('bossa_sound.mp3')
+                self.bossa_channel.set_volume(self.bossa_volume)
+                while self.bossa_active:
+                    if not self.bossa_channel.get_busy():
+                        self.bossa_channel.play(self.bossa_sound)
+                    time.sleep(0.5)
+            except Exception as e:
+                print(f"Bossa sound error: {e}")
+
+        self.bossa_sound_thread = threading.Thread(target=bossa_loop, daemon=True)
+        self.bossa_sound_thread.start()
+        print(f"🎷 Pygame bossa sound started (volume: {self.bossa_volume})")
+
     # Методы для управления громкостью фоновой музыки
     def set_background_volume(self, volume):
         """Устанавливает громкость фоновой музыки (0.0 - 1.0)"""
@@ -546,6 +636,20 @@ class PygameSoundManager:
         """Возвращает текущую громкость боевого звука"""
         return self.battle_volume
 
+    # Методы для управления громкостью босса-новы
+    def set_bossa_volume(self, volume):
+        """Устанавливает громкость босса-новы (0.0 - 1.0)"""
+        if 0.0 <= volume <= 1.0:
+            self.bossa_volume = volume
+            self.bossa_channel.set_volume(volume)
+            print(f"🔊 Bossa volume set to: {volume}")
+        else:
+            print("❌ Volume must be between 0.0 and 1.0")
+
+    def get_bossa_volume(self):
+        """Возвращает текущую громкость босса-новы"""
+        return self.bossa_volume
+
     # Методы остановки
     def stop_background_sound(self):
         """Останавливает фоновый звук"""
@@ -559,31 +663,65 @@ class PygameSoundManager:
         self.battle_channel.stop()
         print("🔇 Pygame battle sound stopped")
 
+    def stop_bossa_sound(self):
+        """Останавливает босса-нову звук"""
+        self.bossa_active = False
+        self.bossa_channel.stop()
+        print("🔇 Pygame bossa sound stopped")
+
     def stop_all_sounds(self):
         """Останавливает все звуки"""
         self.stop_background_sound()
         self.stop_battle_sound()
+        self.stop_bossa_sound()
         print("🔇 All pygame sounds stopped")
 
     # Пресеты громкости для удобства
     def set_volume_preset(self, preset_name):
-        """Устанавливает громкость по пресету для обоих звуков"""
+        """Устанавливает громкость по пресету для всех звуков"""
         presets = {
-            'normal': {'background': 0.5, 'battle': 0.7},
-            'quiet': {'background': 0.3, 'battle': 0.4},
-            'loud': {'background': 0.8, 'battle': 0.9},
-            'menu': {'background': 0.2, 'battle': 0.0},
-            'battle_focus': {'background': 0.3, 'battle': 0.8},
-            'exploration': {'background': 0.6, 'battle': 0.0}
+            'normal': {'background': 0.5, 'battle': 0.7, 'bossa': 0.6},
+            'quiet': {'background': 0.3, 'battle': 0.4, 'bossa': 0.3},
+            'loud': {'background': 0.8, 'battle': 0.9, 'bossa': 0.8},
+            'menu': {'background': 0.2, 'battle': 0.0, 'bossa': 0.4},
+            'battle_focus': {'background': 0.3, 'battle': 0.8, 'bossa': 0.0},
+            'exploration': {'background': 0.6, 'battle': 0.0, 'bossa': 0.5},
+            'bossa_only': {'background': 0.0, 'battle': 0.0, 'bossa': 0.7},
+            'relaxed': {'background': 0.4, 'battle': 0.0, 'bossa': 0.6}
         }
 
         if preset_name in presets:
             bg_vol = presets[preset_name]['background']
             battle_vol = presets[preset_name]['battle']
+            bossa_vol = presets[preset_name]['bossa']
 
             self.set_background_volume(bg_vol)
             self.set_battle_volume(battle_vol)
+            self.set_bossa_volume(bossa_vol)
             print(f"🔊 Preset '{preset_name}' applied")
+
+    # Дополнительные методы для удобства
+    def play_sound_by_name(self, sound_name):
+        """Запускает звук по имени"""
+        if sound_name == 'background':
+            self.play_background_sound()
+        elif sound_name == 'battle':
+            self.play_battle_sound()
+        elif sound_name == 'bossa':
+            self.play_bossa_sound()
+        else:
+            print(f"❌ Unknown sound: {sound_name}")
+
+    def stop_sound_by_name(self, sound_name):
+        """Останавливает звук по имени"""
+        if sound_name == 'background':
+            self.stop_background_sound()
+        elif sound_name == 'battle':
+            self.stop_battle_sound()
+        elif sound_name == 'bossa':
+            self.stop_bossa_sound()
+        else:
+            print(f"❌ Unknown sound: {sound_name}")
 
 # Используйте этот менеджер вместо Ursina Audio
 sound_manager = PygameSoundManager()
@@ -595,7 +733,7 @@ def start_dialogue(npc_name_text, npc_line_text):
     global in_dialogue, current_text, text_progress, full_text, dialogue_stage,active_speaker
     dialogue_stage = 1  # Сбрасываем на первый этап
     active_speaker = "npc"
-    sound_manager.set_background_volume(0.5)
+    sound_manager.set_background_volume(0.3)
 
     in_dialogue = True
     press_e_text.enabled = False
@@ -829,8 +967,16 @@ def close_dialogue():
         dark_overlay.animate_color(color.rgba(0, 0, 0, 0), duration=0.7)
         character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
         main_character_portrait.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
-        battle_background.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
-        enemy_decorate.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        if 'battle_background' in globals() and battle_background:
+            battle_background.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        else:
+            print("[DEBUG] battle_background отсутствует (обычный диалог) — пропускаю анимацию закрытия.")
+
+        # 🔹 Проверяем наличие enemy_decorate
+        if 'enemy_decorate' in globals() and enemy_decorate:
+            enemy_decorate.animate_color(color.rgba(1, 1, 1, 0), duration=0.7)
+        else:
+            print("[DEBUG] enemy_decorate отсутствует (обычный диалог) — пропускаю анимацию закрытия.")
 
 
         npc_name.enabled = False
@@ -992,22 +1138,31 @@ def create_battle_interface():
         surrender_btn.y = -0.45
 
     invoke(show_battle_buttons, delay=1.0)
+
+
 def weak_attack_action():
-    #Слабая атака - просто закрываем диалог
+    """Слабая атака - запускаем мини-игру с прямоугольником"""
     global battle_active
-    battle_active = False
-    sound_manager.stop_battle_sound()
-    sound_manager.play_background_sound()
-    if battle2_sound.playing:
-        battle2_sound.stop()
-    if battle_reaction_sound.playing:
-        battle_reaction_sound.stop()
 
     weak_attack_btn.enabled = False
     strong_attack_btn.enabled = False
     surrender_btn.enabled = False
 
-    close_dialogue()
+    def animate_dialogue_down():
+        dialogue_bg.animate_y(-1.0, duration=0.8, curve=curve.in_quad)
+
+        if player_battle_portrait:
+            player_battle_portrait.animate_y(-1.0, duration=0.8, curve=curve.in_quad)
+
+        if enemy_portrait:
+            enemy_portrait.animate_y(-1.0, duration=0.8, curve=curve.in_quad)
+
+        if enemy_hp_text:
+            enemy_hp_text.animate_position((0.6, -1.5), duration=0.8, curve=curve.in_quad)
+
+        invoke(start_weak_attack_minigame, delay=0.9)
+
+    animate_dialogue_down()
     print("⚔️ Слабая атака!")
 
 def strong_attack_action():
@@ -1066,7 +1221,7 @@ def start_minigame():
 
     minigame_active = True
     hits = 0
-    attempts = 6
+    attempts = 3
 
     # Тёмный полупрозрачный фон
     minigame_ui = Entity(parent=camera.ui, model='quad', scale=(1.5, 1.5), color=color.rgba(0, 0, 0, 0.6), z=-1)
@@ -1177,7 +1332,7 @@ def stop_minigame_hand():
             if hit_text:
                 destroy(hit_text)
 
-            # ✅ Создаём текст внутри мини-игры
+            # Создаём текст внутри мини-игры
             hit_text = Text(
                 parent=minigame_ui,   # теперь часть мини-игры!
                 text=rating_text,
@@ -1279,10 +1434,26 @@ def end_minigame():
             surrender_btn.y = -0.45
 
             if hits >= 3:
-                enemy_hp -= 30
+                damage = 30
+            elif hits == 2:
+                damage = 20
+            elif hits == 1:
+                damage = 10
+            else:
+                damage = 0
+
+            if damage > 0:
+                enemy_hp -= damage
+                if enemy_hp < 0:
+                    enemy_hp = 0
+
                 if enemy_hp_text:
                     enemy_hp_text.text = f"HP: {enemy_hp}"
+
                 enemy_hit_animation()
+
+            # сообщение в консоль
+            print(f"🔸 Мини-игра: попал {hits} раз(а), урон {damage}, HP врага теперь {enemy_hp}")
 
         invoke(show_buttons_again, delay=0.9)
 
@@ -1290,10 +1461,416 @@ def end_minigame():
 
 
 
+base_walk_speed = 8
+base_run_speed = 12
+speed_multiplier = 1.0
+# ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СЛАБОЙ АТАКИ =====
+weak_zones = []
+weak_hit = False
+weak_attempts = 0
+last_x_press_time = 0
+x_cooldown = 0.2
 
+
+def enemy_hit_animation():
+    """Анимация попадания по врагу"""
+    if 'enemy_decorate' in globals() and enemy_decorate:
+        original_x = enemy_decorate.x
+        for i in range(6):
+            invoke(setattr, enemy_decorate, 'x', original_x + (0.02 if i % 2 == 0 else -0.02), delay=i * 0.05)
+        invoke(setattr, enemy_decorate, 'x', original_x, delay=0.3)
+
+        # Мелькание
+        enemy_decorate.animate_color(color.rgb(1, 0.2, 0.2), duration=0.1)
+        invoke(enemy_decorate.animate_color, color.white, 0.2, delay=0.1)
+
+    if not attack2_sound.playing:
+        attack2_sound.play()
+
+
+def start_weak_attack_minigame():
+    global minigame_active, minigame_ui, pointer, weak_zones, weak_hit, weak_attempts
+
+    if minigame_active:
+        return
+
+    minigame_active = True
+    weak_hit = False
+    weak_attempts = 1
+
+    # Тёмный полупрозрачный фон
+    minigame_ui = Entity(parent=camera.ui, model='quad', scale=(1.5, 1.5), color=color.rgba(0, 0, 0, 0.6), z=-1)
+
+    # Основной прямоугольник
+    Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.gray,
+        scale=(0.8, 0.2),
+        position=(0, 0),
+        z=1
+    )
+
+    # Обводка прямоугольника
+    Entity(
+        parent=minigame_ui,
+        model=Quad(mode='line'),
+        color=color.white,
+        scale=(0.81, 0.21),
+        position=(0, 0),
+        thickness=3,
+        z=-0.88
+    )
+
+    # Создаем симметричные зоны вокруг центра
+    weak_zones = []
+
+    # Ширина зон (симметрично от центра):
+    # Центр: 20% (по 10% с каждой стороны от центра)
+    # Середина: 30% (по 15% с каждой стороны от центральной зоны)
+    # Край: 50% (по 25% с каждой стороны)
+    zone_widths = [0.16, 0.24, 0.4]  # Центр, Середина, Край
+    zone_damage = [15, 10, 5]  # Урон: Центр-15, Середина-10, Край-5
+
+    
+    zone_colors_with_alpha = [
+        color.green.tint(0.3),  # Зеленый - центр (самый сложный)
+        color.yellow.tint(0.3),  # Желтый - середина
+        color.red.tint(0.3)  # Красный - край (самый легкий)
+    ]
+
+    
+    zone_full_colors = [color.green, color.yellow, color.red]
+
+    # Начинаем с центра и двигаемся наружу
+    total_width = 0.8
+    center_width = zone_widths[0]  # 0.16 (20%)
+    middle_width = zone_widths[1]  # 0.24 (30%)
+    edge_width = zone_widths[2]  # 0.4 (50%)
+
+    # Центральная зона 
+    center_zone = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=zone_colors_with_alpha[0],
+        scale=(center_width, 0.18),
+        position=(0, 0),  # Прямо в центре
+        z=-0.85
+    )
+
+    weak_zones.append({
+        'entity': center_zone,
+        'x_start': -center_width / 2,
+        'x_end': center_width / 2,
+        'damage': zone_damage[0],
+        'color': zone_full_colors[0],
+        'zone_name': 'Центр'
+    })
+
+    # Средние зоны (по бокам от центра)
+    middle_left_zone = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=zone_colors_with_alpha[1],
+        scale=(middle_width / 2, 0.18),
+        position=(-center_width / 2 - middle_width / 4, 0),  # Слева от центра
+        z=-0.85
+    )
+
+    middle_right_zone = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=zone_colors_with_alpha[1],
+        scale=(middle_width / 2, 0.18),
+        position=(center_width / 2 + middle_width / 4, 0),  # Справа от центра
+        z=-0.85
+    )
+
+    weak_zones.append({
+        'entity': middle_left_zone,
+        'x_start': -center_width / 2 - middle_width / 2,
+        'x_end': -center_width / 2,
+        'damage': zone_damage[1],
+        'color': zone_full_colors[1],
+        'zone_name': 'Середина'
+    })
+
+    weak_zones.append({
+        'entity': middle_right_zone,
+        'x_start': center_width / 2,
+        'x_end': center_width / 2 + middle_width / 2,
+        'damage': zone_damage[1],
+        'color': zone_full_colors[1],
+        'zone_name': 'Середина'
+    })
+
+    
+    edge_left_zone = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=zone_colors_with_alpha[2],
+        scale=(edge_width / 2, 0.18),
+        position=(-total_width / 2 + edge_width / 4, 0),  # Левый край
+        z=-0.85
+    )
+
+    edge_right_zone = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=zone_colors_with_alpha[2],
+        scale=(edge_width / 2, 0.18),
+        position=(total_width / 2 - edge_width / 4, 0),  # Правый край
+        z=-0.85
+    )
+
+    weak_zones.append({
+        'entity': edge_left_zone,
+        'x_start': -total_width / 2,
+        'x_end': -center_width / 2 - middle_width / 2,
+        'damage': zone_damage[2],
+        'color': zone_full_colors[2],
+        'zone_name': 'Край'
+    })
+
+    weak_zones.append({
+        'entity': edge_right_zone,
+        'x_start': center_width / 2 + middle_width / 2,
+        'x_end': total_width / 2,
+        'damage': zone_damage[2],
+        'color': zone_full_colors[2],
+        'zone_name': 'Край'
+    })
+
+    # Движущаяся палка
+    pointer = Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.cyan,
+        scale=(0.01, 0.22),
+        position=(-0.4, 0),
+        z=-0.96
+    )
+
+    # Направление движения 1вправо, -1влево
+    pointer.direction = 1
+    pointer.speed = 2.4
+
+    # Текст инструкции
+    Text(
+        "Нажимай X чтобы атаковать",
+        parent=minigame_ui,
+        y=-0.3,
+        scale=1.1,
+        color=color.white,
+        font='4205.otf'
+    )
+
+    # Текст с уроном
+    Text(
+        "Центр: -15HP | Середина: -10HP | Край: -5HP",
+        parent=minigame_ui,
+        y=-0.4,
+        scale=10,
+        color=color.white,
+        font='4205.otf'
+    )
+
+
+    # Между краем и серединой слева
+    Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.white,
+        scale=(0.005, 0.22),
+        position=(-center_width / 2 - middle_width / 2, 0),
+        z=-0.9
+    )
+
+    # Между серединой и центром слева
+    Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.white,
+        scale=(0.005, 0.22),
+        position=(-center_width / 2, 0),
+        z=-0.9
+    )
+
+    # Между центром и серединой справа
+    Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.white,
+        scale=(0.005, 0.22),
+        position=(center_width / 2, 0),
+        z=-0.9
+    )
+
+    # Между серединой и краем справа
+    Entity(
+        parent=minigame_ui,
+        model='quad',
+        color=color.white,
+        scale=(0.005, 0.22),
+        position=(center_width / 2 + middle_width / 2, 0),
+        z=-0.9
+    )
+
+def update_weak_minigame():
+    global minigame_active, pointer, weak_zones, weak_hit
+
+    if not minigame_active or weak_hit:
+        return
+
+    # Двигаем палку
+    pointer.x += pointer.direction * pointer.speed * time.dt
+
+    if pointer.x >= 0.4:
+        pointer.x = 0.4
+        pointer.direction = -1
+    elif pointer.x <= -0.4:
+        pointer.x = -0.4
+        pointer.direction = 1
+
+
+def stop_weak_minigame():
+    global minigame_active, minigame_ui, pointer, weak_zones, weak_hit, weak_attempts, enemy_hp, last_x_press_time
+
+    if not minigame_active or weak_hit or weak_attempts <= 0:
+        return
+
+    current_time = time.time()
+    if current_time - last_x_press_time < x_cooldown:
+        return
+
+    last_x_press_time = current_time
+    weak_attempts -= 1
+    weak_hit = True
+
+    # Определяем в какую зону попали
+    damage = 0
+    hit_zone = None
+
+    for zone in weak_zones:
+        if zone['x_start'] <= pointer.x <= zone['x_end']:
+            damage = zone['damage']
+            hit_zone = zone
+            break
+
+    
+    if hit_zone:
+        # Подсвечиваем зону
+        hit_zone['entity'].color = color.white
+
+        
+        damage_text = Text(
+            parent=minigame_ui,
+            text=f"-{damage} HP",
+            position=(0, 0.2),
+            scale=1,
+            color=hit_zone['color'],
+            background=True,
+            font='4205.otf',
+            background_color=color.rgba(0, 0, 0, 150)
+        )
+
+        
+        damage_text.animate_scale(1, duration=0.5, curve=curve.out_elastic)
+        damage_text.animate_position((0, 0.3), duration=0.8, curve=curve.out_quad)
+
+    
+        if hit_sound:
+            hit_sound.play()
+
+        print(f"✅ Слабая атака! Попал в зону с уроном {damage}")
+    else:
+        damage = 0
+        if miss_sound:
+            miss_sound.play()
+        print("❌ Слабая атака! Промах!")
+
+    
+    if damage > 0:
+        enemy_hp -= damage
+        if enemy_hp < 0:
+            enemy_hp = 0
+        if enemy_hp_text:
+            enemy_hp_text.text = f"HP: {enemy_hp}"
+
+        # Анимация попадания по врагу
+        enemy_hit_animation()
+
+    # Завершаем мини-игру через секунду
+    invoke(end_weak_minigame, delay=1.0)
+
+
+def end_weak_minigame():
+    
+    global minigame_active, minigame_ui, pointer, weak_zones
+
+    if not minigame_active:
+        return
+
+    
+    if minigame_ui:
+        destroy(minigame_ui)
+    minigame_ui = None
+    pointer = None
+    weak_zones = []
+    minigame_active = False
+
+    print("🎯 Мини-игра слабой атаки завершена!")
+
+    # Возвращаемся к бою
+    animate_dialogue_up_after_weak_attack()
+
+
+def animate_dialogue_up_after_weak_attack():
+    dialogue_bg.animate_y(-0.6, duration=0.8, curve=curve.out_quad)
+
+    if player_battle_portrait:
+        player_battle_portrait.animate_y(-0.38, duration=0.8, curve=curve.out_quad)
+        player_battle_portrait.animate_x(-0.61, duration=0.8, curve=curve.out_quad)
+
+    if enemy_portrait:
+        enemy_portrait.animate_y(-0.38, duration=0.8, curve=curve.out_quad)
+        enemy_portrait.animate_x(0.61, duration=0.8, curve=curve.out_quad)
+
+    if enemy_hp_text:
+        enemy_hp_text.animate_position((0.3, -0.3), duration=0.8, curve=curve.out_quad)
+
+    if enemy_decorate:
+        enemy_decorate.animate_y(0.1, duration=0.8, curve=curve.out_quad)
+
+    def show_buttons_again():
+        weak_attack_btn.enabled = True
+        strong_attack_btn.enabled = True
+        surrender_btn.enabled = True
+
+        weak_attack_btn.x = -0.25
+        strong_attack_btn.x = -0.25
+        surrender_btn.x = -0.25
+
+        weak_attack_btn.y = -0.25
+        strong_attack_btn.y = -0.35
+        surrender_btn.y = -0.45
+
+    invoke(show_buttons_again, delay=0.9)
 
 def update():
-    global in_dialogue, pointer, minigame_active
+    global in_dialogue, pointer, minigame_active, speed_multiplier
+
+    if minigame_active:
+        if walk.playing:
+            walk.stop()
+        press_e_text.enabled = False
+
+        # Определяем тип активной мини-игры
+        if hasattr(pointer, 'direction'): 
+            update_weak_minigame() 
+        elif pointer: 
+            pointer.rotation_z += rotation_speed * time.dt
+        return
 
     if minigame_active:
         if walk.playing:
@@ -1321,10 +1898,39 @@ def update():
     in_zone3 = (17.5 <= player_pos.x <= 22.8 and
                 0.4 <= player_pos.y <= 0.7 and
                 -6.5 <= player_pos.z <= -4)
-
+    in_zone4 =(11 <= player_pos.x <= 15.18 and
+              8 <= player_pos.y <= 20 and
+              12 <= player_pos.z <= 18)
+    in_door_zone = (125 <= player.position.x <= 131 and
+                    -2 <= player.position.y <= 5 and
+                    0 <= player.position.z <= 5)
+    in_door_zone2=(10 <= player.position.x <= 11.9 and
+                   8 <= player.position.y <= 17 and
+                   11 <= player.position.z <= 12)
     press_e_text.enabled = ((human_collider.hovered and in_zone1) or
                             (human_collidera.hovered and in_zone2) or
-                            (human_colliderb.hovered and in_zone3))
+                            (human_colliderb.hovered and in_zone3) or
+                            bossa_collider.hovered and in_zone4)
+    from ursina import distance
+    look_at_door = False
+
+    if hasattr(player, 'forward'):
+        look_point = player.position + player.forward * 2
+        if distance(look_point, collider_door1.position) < 3:
+            look_at_door = True
+    door_text.enabled = (in_door_zone and look_at_door)
+    if hasattr(player, 'forward'):
+        look_point = player.position + player.forward * 2
+        if distance(look_point, collider_door2.position) < 3:
+            look_at_door = True
+
+    # --- Появление подсказки "ВОЙТИ?" ---
+    door_text2.enabled = (in_door_zone2 and look_at_door)
+
+
+    # --- Отладочный ---
+    print(f"x={player_pos.x:.2f}  y={player_pos.y:.2f}  z={player_pos.z:.2f}  "
+          f"in_door_zone={in_door_zone2}  смотрю_на_дверь={look_at_door}")
 
     walking = held_keys['a'] or held_keys['w'] or held_keys['d'] or held_keys['s']
     if walking and player.grounded:
@@ -1363,7 +1969,6 @@ def switch_level():
 
 
 def apply_shaders_to_all_objects():
-    """Добавляет шейдер lit_with_shadows_shader ко всем объектам"""
     all_objects = []
 
     for i in range(1, 113):
@@ -1374,7 +1979,7 @@ def apply_shaders_to_all_objects():
         obj_name = f'bigtree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
-    for i in range(1, 7):
+    for i in range(1, 8):
         obj_name = f'back{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
@@ -1382,7 +1987,7 @@ def apply_shaders_to_all_objects():
         obj_name = f'house{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
-    for i in range(1, 3):
+    for i in range(1, 10):
         obj_name = f'zabor{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
@@ -1390,17 +1995,21 @@ def apply_shaders_to_all_objects():
         obj_name = houseOWN
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
+    for i in range(1,3):
+        obj_name = questhouse
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
 
     for obj in all_objects:
         obj.shader = lit_with_shadows_shader
         houseOWN.shader = lit_with_shadows_shader
         human2.shader = lit_with_shadows_shader
+        questhouse.shader=lit_with_shadows_shader
 
     print(f"Шейдеры применены к {len(all_objects)} объектам")
 
 
 def remove_shaders_from_all_objects():
-    """Убирает шейдеры со всех объектов"""
     all_objects = []
 
     for i in range(1, 113):
@@ -1411,7 +2020,7 @@ def remove_shaders_from_all_objects():
         obj_name = f'bigtree{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
-    for i in range(1, 7):
+    for i in range(1, 9):
         obj_name = f'back{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
@@ -1419,8 +2028,12 @@ def remove_shaders_from_all_objects():
         obj_name = f'house{i}'
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
-    for i in range(1, 3):
+    for i in range(1, 10):
         obj_name = f'zabor{i}'
+        if obj_name in globals():
+            all_objects.append(globals()[obj_name])
+    for i in range(1,3):
+        obj_name = questhouse
         if obj_name in globals():
             all_objects.append(globals()[obj_name])
 
@@ -1430,12 +2043,12 @@ def remove_shaders_from_all_objects():
         zabor1.shader = basic_lighting_shader
         zabor2.shader = basic_lighting_shader
         human2.shader = basic_lighting_shader
+        questhouse.shader=basic_lighting_shader
 
     print(f"Шейдеры убраны с {len(all_objects)} объектов")
 
 
 def test_battle_interface():
-    """Функция для тестирования боевого интерфейса (горячая клавиша U)"""
     global battle_active
 
     print("🔧 Тестирование боевого интерфейса...")
@@ -1444,36 +2057,220 @@ def test_battle_interface():
     battle_active = True
 
     create_battle_interface()
+
+
+def ultra_safe_hide():
+    """Сверхбезопасное скрытие объектов с проверкой на использование в коде"""
+    objects_to_hide = [
+        # Дома
+        'house1', 'house2', 'house3', 'house4', 'house5', 'house6', 'house7', 'house8',
+        'roada', 'roadb', 'roadc',
+        'trotuara', 'trotuarb', 'trotuarc', 'trotuard', 'trotuare', 'trotuarf',
+        'trotuarg', 'trotuarh', 'trotuark', 'trotuar1', 'trotuar2', 'trotuar3',
+        'ogranich1', 'ogranich2',
+        'back1', 'back2', 'back3', 'back4', 'back5','back6',
+        'houseOWN', 'window', 'zabor1', 'zabor2','zabor3','zabor4','zabor5','zabor6','zabor7','zabor8',
+        'questhouse', 'collider_questhouse1', 'collider_questhouse2'
+        
+    ]
+
+    trees_to_hide = []
+
+    
+    for i in range(1, 113):
+        trees_to_hide.append(f'tree{i}')
+
+    
+    for i in range(1, 76):
+        trees_to_hide.append(f'bigtree{i}')
+
+    # Объединяем все объекты для скрытия
+    all_objects_to_hide = objects_to_hide + trees_to_hide
+
+    hidden_count = 0
+
+    for obj_name in all_objects_to_hide:
+        if obj_name in globals():
+            obj = globals()[obj_name]
+            if obj and hasattr(obj, 'enabled'):  
+                try:
+                    obj.enabled = False  
+                    hidden_count += 1
+                    print(f"👻 Скрыт: {obj_name}")
+                except Exception as e:
+                    print(f"❌ Ошибка при скрытии {obj_name}: {e}")
+
+    print(f"🎯 Всего скрыто объектов: {hidden_count}")
+
+
+def hide_npcs():
+    
+    npc_objects = [
+        # Первый NPC
+        'humana', 'head', 'body', 'right', 'human_collider',
+        # Второй NPC
+        'humanb', 'heada', 'bodya', 'righta', 'human_collidera',
+        # Третий NPC
+        'humanc', 'headb', 'bodyb', 'rightb', 'human_colliderb'
+    ]
+
+    hidden_count = 0
+
+    for obj_name in npc_objects:
+        if obj_name in globals():
+            obj = globals()[obj_name]
+            if obj and hasattr(obj, 'enabled'):
+                try:
+                    obj.enabled = False  # Скрываем объект
+                    hidden_count += 1
+                    print(f"👻 Скрыт NPC: {obj_name}")
+                except Exception as e:
+                    print(f"❌ Ошибка при скрытии {obj_name}: {e}")
+
+    print(f"🎯 Всего скрыто NPC объектов: {hidden_count}")
+
+
+def show_npcs():
+    
+    npc_objects = [
+        'humana', 'head', 'body', 'right', 'human_collider',
+        'humanb', 'heada', 'bodya', 'righta', 'human_collidera',
+        'humanc', 'headb', 'bodyb', 'rightb', 'human_colliderb'
+    ]
+
+    shown_count = 0
+
+    for obj_name in npc_objects:
+        if obj_name in globals():
+            obj = globals()[obj_name]
+            if obj and hasattr(obj, 'enabled'):
+                try:
+                    obj.enabled = True 
+                    shown_count += 1
+                    print(f"👀 Показан NPC: {obj_name}")
+                except Exception as e:
+                    print(f"❌ Ошибка при показе {obj_name}: {e}")
+
+    print(f"🎯 Всего показано NPC объектов: {shown_count}")
+def ultra_safe_show():
+    
+    objects_to_show = [
+        # Дома
+        'house1', 'house2', 'house3', 'house4', 'house5', 'house6', 'house7', 'house8',
+        'roada', 'roadb', 'roadc',
+        'trotuara', 'trotuarb', 'trotuarc', 'trotuard', 'trotuare', 'trotuarf',
+        'trotuarg', 'trotuarh', 'trotuark', 'trotuar1', 'trotuar2', 'trotuar3',
+        'ogranich1', 'ogranich2',
+        'back1', 'back2', 'back3', 'back4', 'back5','back6',
+        'houseOWN', 'window', 'zabor1', 'zabor2','zabor3','zabor4','zabor5','zabor6','zabor7','zabor8',
+        'questhouse', 'collider_questhouse1', 'collider_questhouse2'
+    ]
+
+    # Добавляем все деревья
+    trees_to_show = []
+    for i in range(1, 113):
+        trees_to_show.append(f'tree{i}')
+    for i in range(1, 76):
+        trees_to_show.append(f'bigtree{i}')
+
+    # Объединяем все объекты для показа
+    all_objects_to_show = objects_to_show + trees_to_show
+
+    shown_count = 0
+
+    for obj_name in all_objects_to_show:
+        if obj_name in globals():
+            obj = globals()[obj_name]
+            if obj and hasattr(obj, 'enabled'):
+                try:
+                    obj.enabled = True  # Показываем объект
+                    shown_count += 1
+                    print(f"👀 Показан: {obj_name}")
+                except Exception as e:
+                    print(f"❌ Ошибка при показе {obj_name}: {e}")
+
+    print(f"🎯 Всего показано объектов: {shown_count}")
+
+def teleport_player(x, y, z):
+    
+    player.position = (x, y, z)
+    print(f"🎮 Игрок телепортирован в ({x}, {y}, {z})")
+
+
+def teleport_with_fade(target_position, fade_duration=2):
+
+
+    # Создаем черный экран для затемнения
+    fade_overlay = Entity(
+        parent=camera.ui,
+        model='quad',
+        scale=(2, 2),
+        color=color.black,
+        alpha=0,
+        z=-10
+    )
+
+    def fade_sequence():
+        # 1. Затемнение экрана
+        fade_overlay.animate('alpha', 1, duration=fade_duration / 2, curve=curve.linear)
+
+        # 2. Телепортация в середине затемнения
+        def do_teleport():
+            player.position = target_position
+
+        invoke(do_teleport, delay=fade_duration / 2)
+
+        # 3. Осветление экрана
+        invoke(lambda: fade_overlay.animate('alpha', 0, duration=fade_duration / 2, curve=curve.linear),
+               delay=fade_duration / 2)
+
+        # 4. Удаление overlay после анимации
+        invoke(lambda: destroy(fade_overlay), delay=fade_duration)
+
+    fade_sequence()
 def input(key):
     global in_dialogue, minigame_active, pointer, zones, hits, attempts, battle_active
 
     if minigame_active:
+        if key == 'x':
+            # Определяем тип активной мини-игры
+            if hasattr(pointer, 'direction'):  # Мини-игра слабой атаки
+                stop_weak_minigame()
+            else:  # Мини-игра сильной атаки
+                stop_minigame_hand()
+            return
+        return
+
+    # --- Мини-игра ---
+    if minigame_active:
         if key == 'x' and attempts > 0:
             stop_minigame_hand()
             return
-
         return
 
+    # --- Запуск мини-игры ---
     if key == '0' and not minigame_active:
         start_minigame()
         return
 
+    if key == 'z':
+        ultra_safe_hide()
+        hide_npcs()
+        print("💥 Нажата J - уничтожаем указанные объекты!")
+        return
+
+    # --- Тест боя ---
     if key == 'u' and not in_dialogue and not battle_active and not minigame_active:
         test_battle_interface()
         return
 
+    # --- Взаимодействие с NPC ---
     if key == 'e' and not in_dialogue and press_e_text.enabled:
         player_pos = player.position
-
-        in_zone1 = (18 <= player_pos.x <= 23 and
-                    0.4 <= player_pos.y <= 0.7 and
-                    3 <= player_pos.z <= 9)
-        in_zone2 = (45 <= player_pos.x <= 52 and
-                    0.4 <= player_pos.y <= 0.7 and
-                    4 <= player_pos.z <= 7.5)
-        in_zone3 = (17.5 <= player_pos.x <= 22.8 and
-                    0.4 <= player_pos.y <= 0.7 and
-                    -6.5 <= player_pos.z <= -4)
+        in_zone1 = (18 <= player_pos.x <= 23 and 0.4 <= player_pos.y <= 0.7 and 3 <= player_pos.z <= 9)
+        in_zone2 = (45 <= player_pos.x <= 52 and 0.4 <= player_pos.y <= 0.7 and 4 <= player_pos.z <= 7.5)
+        in_zone3 = (17.5 <= player_pos.x <= 22.8 and 0.4 <= player_pos.y <= 0.7 and -6.5 <= player_pos.z <= -4)
+        in_zone4 = (11 <= player_pos.x <= 15.18 and 8 <= player_pos.y <= 20 and 12 <= player_pos.z <= 18)
 
         if human_collider.hovered and in_zone1:
             start_dialogue("Человек 1", "Привет! Рад тебя видеть. Что скажешь?")
@@ -1481,20 +2278,145 @@ def input(key):
             start_dialogue("Человек 2", "Привет! Я второй NPC.")
         elif human_colliderb.hovered and in_zone3:
             start_dialogue("Человек 3", "Здравствуй! Я третий NPC.")
+        elif bossa_collider.hovered and in_zone4:
+            start_dialogue("Босс","Вот тебе задание.")
 
+    # --- Взаимодействие с дверями ---
+    if key == 'e':
+        print("[DEBUG] Нажата клавиша E")
+
+        player_pos = player.position
+
+        
+        in_door_zone1 = (125 <= player_pos.x <= 131 and
+                         -2 <= player_pos.y <= 5 and
+                         0 <= player_pos.z <= 5)
+
+        
+        in_door_zone2 = (10 <= player_pos.x <= 11.9 and
+                         8 <= player_pos.y <= 17 and
+                         11 <= player_pos.z <= 12)
+
+        print(f"[DEBUG] Позиция игрока: x={player_pos.x:.2f}, y={player_pos.y:.2f}, z={player_pos.z:.2f}")
+        print(f"[DEBUG] Дверь1: in_zone={in_door_zone1}")
+        print(f"[DEBUG] Дверь2: in_zone={in_door_zone2}")
+
+        # Проверяем расстояние до объектов дверей
+        if 'collider_door1' in globals() and collider_door1:
+            dist_to_door1 = distance(player_pos, collider_door1.position)
+            print(f"[DEBUG] Расстояние до двери1: {dist_to_door1}")
+        else:
+            dist_to_door1 = 1000
+            print("[DEBUG] Дверь1 не найдена")
+
+        if 'collider_door2' in globals() and collider_door2:
+            dist_to_door2 = distance(player_pos, collider_door2.position)
+            print(f"[DEBUG] Расстояние до двери2: {dist_to_door2}")
+        else:
+            dist_to_door2 = 1000
+            print("[DEBUG] Дверь2 не найдена")
+
+        # Если находимся в зоне первой двери и близко к ней
+        if in_door_zone1 and dist_to_door1 < 5:
+            print("[DEBUG] ВХОД В ДОМ — запуск анимации телепортации")
+
+            def enter_house():
+                ultra_safe_hide()
+                hide_npcs()
+                questhouseinside.enabled = True
+                questhouseinside_collider1.enabled = True
+                questhouseinside_collider2.enabled = True
+                questhouseinside_collider3.enabled = True
+                questhouseinside_collider4.enabled = True
+                questhouseinside_collider5.enabled = True
+                questhouseinside_collider6.enabled = True
+                questhouseinside_collider7.enabled = True
+                questhouseinside_collider8.enabled = True
+                questhouseinside_collider9.enabled = True
+                questhouseinside_collider10.enabled = True
+                bossa.enabled= True
+                sound_manager.stop_background_sound()
+                sound_manager.play_bossa_sound()
+
+
+
+            
+            teleport_with_fade((10.9, 10, 11.03), fade_duration=3)
+            invoke(enter_house, delay=1.5)  
+
+        # Если находимся в зоне второй двери и близко к ней
+        elif in_door_zone2 and dist_to_door2 < 5:
+            print("[DEBUG] ВЫХОД ИЗ ДОМА — запуск анимации телепортации")
+
+            def exit_house():
+                ultra_safe_show()
+                show_npcs()
+                questhouseinside.enabled = False
+                questhouseinside_collider1.enabled = False
+                questhouseinside_collider2.enabled = False
+                questhouseinside_collider3.enabled = False
+                questhouseinside_collider4.enabled = False
+                questhouseinside_collider5.enabled = False
+                questhouseinside_collider6.enabled = False
+                questhouseinside_collider7.enabled = False
+                questhouseinside_collider8.enabled = False
+                questhouseinside_collider9.enabled = False
+                questhouseinside_collider10.enabled = False
+                bossa.enabled= False
+                sun.look_at(Vec3(-1, -1, -1))
+                sun.color = color.rgb(1.0, 0.7, 0.4)
+                Sky.texture = 'Sunrise.jpg'
+
+                AmbientLight(color=color.rgb(0.8, 0.6, 0.3))
+
+                camera.background_color = color.rgb(0.9, 0.5, 0.2)
+                hide_npcs()
+                sound_manager.stop_bossa_sound()
+                sound_manager.play_background_sound()
+
+
+            
+            teleport_with_fade((126, 2.24, 2.64), fade_duration=3)
+            invoke(exit_house, delay=1.5) 
+
+        else:
+            print("[DEBUG] Неукакойs двери или слишком далеко")
+
+    # --- Закрытие диалогов ---
     if key in ('1', '2', '3') and in_dialogue and not battle_active:
         close_dialogue()
 
+    # --- Быстрая смена уровня ---
     if key == 'p':
+        print("[DEBUG] Ручной вызов switch_level() через P")
         switch_level()
-    if key == 'space':
-        if not jump.playing:
-            jump.play()
+
+    # --- Прыжок ---
+    if key == 'space' and not jump.playing:
+        jump.play()
+
+    # --- Выход ---
     if key == 'q':
         quit()
+    if key=='v':
+        ultra_safe_show()
+        show_npcs()
+    if key=='b':
+        teleport_player(10.9, 10, 11.03)
+        questhouseinside.enabled = True
+        questhouseinside_collider1.enabled = True
+        questhouseinside_collider2.enabled = True
+        questhouseinside_collider3.enabled = True
+        questhouseinside_collider4.enabled = True
+        questhouseinside_collider5.enabled = True
+        questhouseinside_collider6.enabled = True
+        questhouseinside_collider7.enabled = True
+        questhouseinside_collider8.enabled = True
+        questhouseinside_collider9.enabled = True
+        questhouseinside_collider10.enabled = True
 
 button1.on_click = setup_conversation_buttons  # "Поговорить"
-button2.on_click = attack_action  # "Напасть" - теперь запускает бой
+button2.on_click = attack_action  # "Напасть"
 button3.on_click = close_dialogue  # "Уйти"
 talk_button.on_click = talk_action
 dont_care_button.on_click = dont_care_action
@@ -1503,10 +2425,6 @@ strong_attack_btn.on_click = strong_attack_action
 surrender_btn.on_click = surrender_action
 
 app.run()
-
-
-
-
 
 
 
