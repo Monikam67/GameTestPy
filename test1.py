@@ -1,3 +1,4 @@
+
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader, basic_lighting_shader, unlit_shader
@@ -4532,6 +4533,7 @@ teleport_player(50.05,0.5,-6.47)
 camera.rotation_y = -90
 hide_tonight_npc()
 app.run()
+
 
 
 
